@@ -64,7 +64,7 @@
                                 QR Code
                             </div>
                         @endif
-                        <span class="text-[10px] font-mono text-slate-500 mt-1.5">{{ $registration->queue_code }} &middot; NIM {{ $user->profile->nim }}</span>
+                        <span class="text-[10px] font-mono text-slate-500 mt-1.5">{{ $registration->queue_code }} &middot; NISN {{ $user->profile->nim }}</span>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
                     </div>
 
                     <div>
-                        <span class="text-slate-400 block font-medium">NIM</span>
+                        <span class="text-slate-400 block font-medium">NISN</span>
                         <span class="font-bold text-slate-900 font-mono text-sm">{{ $user->profile->nim }}</span>
                     </div>
 

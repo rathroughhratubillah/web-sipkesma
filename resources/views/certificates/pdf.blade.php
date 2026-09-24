@@ -185,7 +185,7 @@
             <td class="value">{{ $user->profile->full_name }}</td>
         </tr>
         <tr>
-            <td class="label">NIM / No. Pendaftaran</td>
+            <td class="label">NISN / No. Pendaftaran</td>
             <td class="colon">:</td>
             <td class="value">{{ $user->profile->nim }}</td>
         </tr>

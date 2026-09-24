@@ -44,7 +44,7 @@
         <!-- Search Bar -->
         <form method="GET" action="{{ route('staff.station.index', $station_name) }}" class="flex items-center gap-2">
             <input type="text" name="search" value="{{ $search }}" 
-                   placeholder="Cari No Antrean / NIM / Nama..."
+                   placeholder="Cari No Antrean / NISN / Nama..."
                    class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-teal-500 outline-hidden w-60">
             <button type="submit" class="px-3.5 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition">
                 Cari

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CertificateVerificationController;
 use App\Http\Controllers\HomeController;
@@ -33,6 +34,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
+    // Google OAuth
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -106,3 +111,50 @@ Route::middleware(['auth', 'role:staff|admin'])->prefix('petugas')->as('staff.')
     Route::put('/jadwal/{session}', [TestSessionController::class, 'update'])->name('sessions.update');
     Route::delete('/jadwal/{session}', [TestSessionController::class, 'destroy'])->name('sessions.destroy');
 });
+
+// ============================================================
+// Admin Panel (Role: admin only)
+// ============================================================
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->as('admin.')->group(function () {
+
+    // Dashboard Admin
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // Kelola Pengguna
+    Route::get('/pengguna', [AdminController::class, 'users'])->name('users.index');
+    Route::get('/pengguna/tambah', [AdminController::class, 'createUser'])->name('users.create');
+    Route::post('/pengguna', [AdminController::class, 'storeUser'])->name('users.store');
+    Route::get('/pengguna/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+    Route::put('/pengguna/{user}', [AdminController::class, 'updateUser'])->name('users.update');
+    Route::delete('/pengguna/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
+
+    // Kelola Profil Mahasiswa
+    Route::get('/profil', [AdminController::class, 'profiles'])->name('profiles.index');
+    Route::get('/profil/{profile}/edit', [AdminController::class, 'editProfile'])->name('profiles.edit');
+    Route::put('/profil/{profile}', [AdminController::class, 'updateProfile'])->name('profiles.update');
+    Route::delete('/profil/{profile}', [AdminController::class, 'destroyProfile'])->name('profiles.destroy');
+
+    // Kelola Riwayat Kesehatan
+    Route::get('/kesehatan', [AdminController::class, 'healthHistories'])->name('health.index');
+    Route::get('/kesehatan/{healthHistory}/edit', [AdminController::class, 'editHealth'])->name('health.edit');
+    Route::put('/kesehatan/{healthHistory}', [AdminController::class, 'updateHealth'])->name('health.update');
+    Route::delete('/kesehatan/{healthHistory}', [AdminController::class, 'destroyHealth'])->name('health.destroy');
+
+    // Kelola Registrasi
+    Route::get('/registrasi', [AdminController::class, 'registrations'])->name('registrations.index');
+    Route::get('/registrasi/{registration}/edit', [AdminController::class, 'editRegistration'])->name('registrations.edit');
+    Route::put('/registrasi/{registration}', [AdminController::class, 'updateRegistration'])->name('registrations.update');
+    Route::delete('/registrasi/{registration}', [AdminController::class, 'destroyRegistration'])->name('registrations.destroy');
+
+    // Kelola Pembayaran
+    Route::get('/pembayaran', [AdminController::class, 'payments'])->name('payments.index');
+    Route::put('/pembayaran/{payment}/status', [AdminController::class, 'updatePaymentStatus'])->name('payments.update');
+    Route::delete('/pembayaran/{payment}', [AdminController::class, 'destroyPayment'])->name('payments.destroy');
+
+    // Kelola Hasil Pemeriksaan / Stasiun Medis
+    Route::get('/hasil-skrining', [AdminController::class, 'results'])->name('results.index');
+    Route::get('/hasil-skrining/{stationResult}/edit', [AdminController::class, 'editResult'])->name('results.edit');
+    Route::put('/hasil-skrining/{stationResult}', [AdminController::class, 'updateResult'])->name('results.update');
+    Route::delete('/hasil-skrining/{stationResult}', [AdminController::class, 'destroyResult'])->name('results.destroy');
+});
+

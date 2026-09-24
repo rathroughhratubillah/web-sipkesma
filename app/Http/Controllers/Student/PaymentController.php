@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PaymentController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
+        $user->load('profile');
         $registration = $user->registration;
 
         if (!$registration || $registration->status === 'draft') {
@@ -41,7 +43,18 @@ class PaymentController extends Controller
             ],
         ];
 
-        return view('student.payment', compact('user', 'registration', 'payment', 'bankAccounts'));
+        // Generate QRIS standard dynamic payload
+        $nim = $user->profile?->nim ?? 'MHS';
+        $qrisPayload = '00020101021226680016ID.GO.UINSSC.SIPKESMA011893600998102026192837452045812530336054061500005802ID5924KLINIK SIPKESMA PPKMB6009PALEMBANG61053011162280120SIPKESMA-REG-' . $registration->id . '-' . $nim . '6304A8F2';
+
+        $qrisSvg = null;
+        try {
+            $qrisSvg = QrCode::size(220)->generate($qrisPayload);
+        } catch (\Throwable $e) {
+            $qrisSvg = null;
+        }
+
+        return view('student.payment', compact('user', 'registration', 'payment', 'bankAccounts', 'qrisSvg', 'qrisPayload'));
     }
 
     public function store(Request $request)

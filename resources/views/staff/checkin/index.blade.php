@@ -82,7 +82,7 @@
         <div class="lg:col-span-5 bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-6">
             <div>
                 <h2 class="text-base font-bold text-slate-900">Pemindai QR & Check-in Lokasi</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Pindai QR pada tiket antrean atau input manual nomor antrean / NIM.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Pindai QR pada tiket antrean atau input manual nomor antrean / NISN.</p>
             </div>
 
             <!-- Toast / Message Box -->
@@ -121,7 +121,7 @@
 
             <!-- Manual Input Form -->
             <div class="pt-4 border-t border-slate-100 space-y-3">
-                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">Input Manual (Nomor Antrean / NIM)</span>
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">Input Manual (Nomor Antrean / NISN)</span>
                 
                 <div class="flex items-center gap-2">
                     <input type="text" x-model="manualInput" 

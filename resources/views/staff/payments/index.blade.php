@@ -62,7 +62,7 @@
                             <!-- Mahasiswa -->
                             <td class="p-4">
                                 <div class="font-bold text-slate-900 text-sm">{{ $profile?->full_name ?: $user?->name }}</div>
-                                <div class="text-slate-500 font-mono">{{ $profile?->nim ?: 'NIM belum ada' }}</div>
+                                <div class="text-slate-500 font-mono">{{ $profile?->nim ?: 'NISN belum ada' }}</div>
                                 <div class="text-[11px] text-slate-400">{{ $profile?->faculty ?: $user?->email }}</div>
                             </td>
 

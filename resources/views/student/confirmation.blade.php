@@ -30,7 +30,7 @@
 
             <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
                 <div>
-                    <dt class="text-slate-500">Nomor Induk Mahasiswa (NIM)</dt>
+                    <dt class="text-slate-500">Nomor Induk Siswa Nasional (NISN)</dt>
                     <dd class="font-bold text-slate-900 font-mono">{{ $user->profile->nim }}</dd>
                 </div>
                 <div>

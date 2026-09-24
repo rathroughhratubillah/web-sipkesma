@@ -92,8 +92,8 @@ class DatabaseSeeder extends Seeder
             [
                 'nim' => '2026101001',
                 'full_name' => 'Ratu Ayu Maharani',
-                'faculty' => 'Sains dan Teknologi',
-                'major' => 'Sistem Informasi',
+                'faculty' => 'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)',
+                'major' => 'Informatika',
                 'phone' => '081234567890',
                 'gender' => 'P',
                 'birth_date' => '2007-04-15',
@@ -126,8 +126,8 @@ class DatabaseSeeder extends Seeder
             [
                 'nim' => '2026101002',
                 'full_name' => 'Budi Pratama',
-                'faculty' => 'Kedokteran dan Ilmu Kesehatan',
-                'major' => 'Pendidikan Dokter',
+                'faculty' => 'Fakultas Syariah',
+                'major' => 'Ilmu Falak',
                 'phone' => '081298765432',
                 'gender' => 'L',
                 'birth_date' => '2006-08-20',
@@ -190,7 +190,7 @@ class DatabaseSeeder extends Seeder
             [
                 'nim' => '2026101003',
                 'full_name' => 'Siti Rahmawati',
-                'faculty' => 'Ekonomi dan Bisnis Islam',
+                'faculty' => 'Fakultas Ekonomi Dan Bisnis Islam (FEBI)',
                 'major' => 'Perbankan Syariah',
                 'phone' => '081377889900',
                 'gender' => 'P',
@@ -286,7 +286,7 @@ class DatabaseSeeder extends Seeder
             [
                 'nim' => '2026101004',
                 'full_name' => 'Ahmad Fauzi Rahman',
-                'faculty' => 'Tarbiyah dan Keguruan',
+                'faculty' => 'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)',
                 'major' => 'Pendidikan Agama Islam',
                 'phone' => '085266778899',
                 'gender' => 'L',

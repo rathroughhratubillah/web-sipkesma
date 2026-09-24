@@ -48,7 +48,7 @@
                         <span class="font-bold text-slate-900">{{ $registration->user->profile->full_name }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-slate-500">NIM</span>
+                        <span class="text-slate-500">NISN</span>
                         <span class="font-bold text-slate-900 font-mono">{{ $registration->user->profile->nim }}</span>
                     </div>
                     <div class="flex justify-between">

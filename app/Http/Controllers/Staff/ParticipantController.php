@@ -45,12 +45,11 @@ class ParticipantController extends Controller
         $participants = $query->latest()->paginate(20)->withQueryString();
 
         $faculties = [
-            'Sains dan Teknologi',
-            'Kedokteran dan Ilmu Kesehatan',
-            'Ekonomi dan Bisnis Islam',
-            'Tarbiyah dan Keguruan',
-            'Syariah dan Hukum',
-            'Ushuluddin dan Pemikiran Islam',
+            'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)',
+            'Fakultas Ekonomi Dan Bisnis Islam (FEBI)',
+            'Fakultas Syariah',
+            'Fakultas Dakwah Dan Komunikasi Islam (FDKI)',
+            'Fakultas Ushuluddin Dan Arab',
         ];
 
         return view('staff.participants.index', compact('participants', 'search', 'status', 'faculty', 'faculties'));
@@ -80,7 +79,7 @@ class ParticipantController extends Controller
             fputcsv($file, [
                 'ID Registrasi',
                 'Nomor Antrean',
-                'NIM',
+                'NISN',
                 'Nama Lengkap',
                 'Email',
                 'Fakultas',

@@ -37,7 +37,7 @@
                     <span class="font-bold text-slate-900 text-base">{{ $user->profile->full_name }}</span>
                 </div>
                 <div>
-                    <span class="text-slate-400 block font-medium">NIM</span>
+                    <span class="text-slate-400 block font-medium">NISN</span>
                     <span class="font-bold text-slate-900 font-mono text-base">{{ $user->profile->nim }}</span>
                 </div>
                 <div>

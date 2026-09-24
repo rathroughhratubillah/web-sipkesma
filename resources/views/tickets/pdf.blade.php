@@ -109,7 +109,7 @@
                 <td class="val">{{ $user->profile->full_name }}</td>
             </tr>
             <tr>
-                <td class="lbl">NIM</td>
+                <td class="lbl">NISN</td>
                 <td>:</td>
                 <td class="val">{{ $user->profile->nim }}</td>
             </tr>

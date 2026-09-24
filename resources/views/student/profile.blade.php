@@ -18,7 +18,7 @@
     <!-- Form Card -->
     <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm" 
          x-data="{
-            faculty: '{{ old('faculty', $profile->faculty ?? 'Sains dan Teknologi') }}',
+            faculty: '{{ old('faculty', $profile->faculty ?? '') }}',
             faculties: {{ json_encode($faculties) }},
             selectedMajor: '{{ old('major', $profile->major ?? '') }}'
          }">
@@ -26,14 +26,14 @@
         <form method="POST" action="{{ route('student.profile.store') }}" class="space-y-6">
             @csrf
 
-            <!-- NIM & Nama -->
+            <!-- NISN & Nama -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        Nomor Induk Mahasiswa (NIM) <span class="text-rose-500">*</span>
+                        Nomor Induk Siswa Nasional (NISN) <span class="text-rose-500">*</span>
                     </label>
                     <input type="text" name="nim" value="{{ old('nim', $profile->nim ?? '') }}" required
-                           placeholder="Contoh: 2026101001"
+                           placeholder="Contoh: 1234567890"
                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-sm outline-hidden transition">
                     @error('nim') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
                 </div>

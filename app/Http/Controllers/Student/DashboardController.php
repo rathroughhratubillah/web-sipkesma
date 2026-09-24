@@ -35,7 +35,7 @@ class DashboardController extends Controller
             2 => [
                 'id' => 2,
                 'name' => 'Lengkapi Data Diri',
-                'description' => 'Isi identitas diri, NIM, dan prodi.',
+                'description' => 'Isi identitas diri, NISN, dan prodi.',
                 'is_completed' => (bool) $user->profile,
                 'route' => route('student.profile'),
             ],

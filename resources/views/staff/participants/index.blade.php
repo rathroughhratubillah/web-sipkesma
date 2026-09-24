@@ -13,7 +13,7 @@
             <!-- Search Keyword -->
             <div class="lg:col-span-4">
                 <input type="text" name="search" value="{{ $search }}"
-                       placeholder="Cari NIM, Nama, No HP, No Antrean..."
+                       placeholder="Cari NISN, Nama, No HP, No Antrean..."
                        class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:border-teal-500 text-xs font-medium outline-hidden">
             </div>
 
@@ -70,7 +70,7 @@
                 <thead class="bg-slate-50 text-slate-500 uppercase font-bold border-b border-slate-200">
                     <tr>
                         <th class="p-3.5">Antrean</th>
-                        <th class="p-3.5">NIM & Mahasiswa</th>
+                        <th class="p-3.5">NISN &amp; Mahasiswa</th>
                         <th class="p-3.5">Fakultas / Prodi</th>
                         <th class="p-3.5">Sesi Skrining</th>
                         <th class="p-3.5">Status</th>

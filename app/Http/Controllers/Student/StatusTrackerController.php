@@ -26,7 +26,7 @@ class StatusTrackerController extends Controller
                 'icon' => 'shield',
             ],
             'pemeriksaan' => [
-                'title' => '3. Pemeriksaan Fisik & Dokter',
+                'title' => '3. Cek Buta Warna',
                 'desc' => 'Tekanan darah, visus mata, buta warna, dan riwayat kesehatan oleh dokter.',
                 'icon' => 'stethoscope',
             ],

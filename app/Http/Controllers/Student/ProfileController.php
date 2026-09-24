@@ -16,12 +16,53 @@ class ProfileController extends Controller
         $profile = $user->profile;
 
         $faculties = [
-            'Sains dan Teknologi' => ['Sistem Informasi', 'Teknik Informatika', 'Biologi', 'Kimia', 'Matematika'],
-            'Kedokteran dan Ilmu Kesehatan' => ['Pendidikan Dokter', 'Farmasi', 'Ilmu Keperawatan', 'Kesehatan Masyarakat'],
-            'Ekonomi dan Bisnis Islam' => ['Manajemen Bisnis Syariah', 'Perbankan Syariah', 'Ekonomi Syariah', 'Akuntansi Syariah'],
-            'Tarbiyah dan Keguruan' => ['Pendidikan Agama Islam', 'Pendidikan Bahasa Arab', 'Pendidikan Guru Madrasah'],
-            'Syariah dan Hukum' => ['Hukum Keluarga Islam', 'Hukum Ekonomi Syariah', 'Ilmu Hukum'],
-            'Ushuluddin dan Pemikiran Islam' => ['Ilmu Al-Qur\'an dan Tafsir', 'Aqidah dan Filsafat Islam'],
+            'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)' => [
+                'Informatika',
+                'Manajemen Pendidikan Islam',
+                'Matematika',
+                'Pendidikan Agama Islam',
+                'Pendidikan Bahasa Arab',
+                'Pendidikan Guru Madrasah Ibtidaiyah',
+                'Pendidikan Islam Anak Usia Dini',
+                'PJJ Pendidikan Agama Islam',
+                'PJJ Pendidikan Bahasa Arab',
+                'PJJ Pendidikan Guru Madrasah Ibtidaiyah',
+                'Tadris Bahasa Indonesia',
+                'Tadris Bahasa Inggris',
+                'Tadris Biologi',
+                'Tadris Ilmu Pengetahuan Sosial',
+                'Tadris Kimia',
+                'Tadris Matematika',
+            ],
+            'Fakultas Ekonomi Dan Bisnis Islam (FEBI)' => [
+                'Akuntansi Syariah',
+                'Bioteknologi',
+                'Ekonomi Syariah',
+                'Pariwisata Syariah',
+                'Perbankan Syariah',
+            ],
+            'Fakultas Syariah' => [
+                'Hukum Ekonomi Syari\'ah (Muamalah)',
+                'Hukum Keluarga (Akhwalul Syaksiyah)',
+                'Hukum Tatanegara Islam',
+                'Ilmu Falak',
+                'PJJ Hukum Keluarga',
+            ],
+            'Fakultas Dakwah Dan Komunikasi Islam (FDKI)' => [
+                'Bimbingan dan Konseling Islam',
+                'Komunikasi dan Penyiaran Islam',
+                'Pengembangan Masyarakat Islam',
+                'Sosiologi Agama',
+            ],
+            'Fakultas Ushuluddin Dan Arab' => [
+                'Aqidah dan Filsafat Islam',
+                'Bahasa dan Sastra Arab',
+                'Ilmu Al-Qur\'an dan Tafsir',
+                'Ilmu Hadis',
+                'PJJ Sejarah Peradaban Islam',
+                'Sejarah Peradaban Islam',
+                'Tasawuf dan Psikoterapi',
+            ],
         ];
 
         return view('student.profile', compact('user', 'profile', 'faculties'));
