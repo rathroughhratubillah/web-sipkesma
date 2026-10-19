@@ -23,37 +23,8 @@
 </head>
 <body class="min-h-screen text-slate-800 antialiased selection:bg-teal-500 selection:text-white">
 
-    <!-- Demo Role Fast Switcher Banner -->
-    <div class="bg-slate-900 text-slate-300 text-xs py-1.5 px-4 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">
-                    Akses Cepat Demo
-                </span>
-                <span class="text-slate-400">Masuk langsung ke akun contoh:</span>
-            </div>
-            <div class="flex items-center gap-2 flex-wrap">
-                <a href="{{ route('demo.login', 'ratu') }}" class="px-2.5 py-1 rounded bg-teal-800/80 hover:bg-teal-700 text-teal-200 transition">
-                    Mahasiswa Baru (Ratu)
-                </a>
-                <a href="{{ route('demo.login', 'budi') }}" class="px-2.5 py-1 rounded bg-teal-800/80 hover:bg-teal-700 text-teal-200 transition">
-                    Mahasiswa Bertiket (Budi)
-                </a>
-                <a href="{{ route('demo.login', 'siti') }}" class="px-2.5 py-1 rounded bg-teal-800/80 hover:bg-teal-700 text-teal-200 transition">
-                    Mahasiswa Bersertifikat (Siti)
-                </a>
-                <a href="{{ route('demo.login', 'staff') }}" class="px-2.5 py-1 rounded bg-amber-800/80 hover:bg-amber-700 text-amber-200 transition">
-                    Petugas Medis
-                </a>
-                <a href="{{ route('demo.login', 'admin') }}" class="px-2.5 py-1 rounded bg-purple-800/80 hover:bg-purple-700 text-purple-200 transition">
-                    Admin
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header Navigation matching Screenshot 1 & 2 -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-slate-100 sticky top-7 z-40">
+    <!-- Header Navigation -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-100 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-3 group">
@@ -79,13 +50,17 @@
             <!-- Auth Buttons -->
             <div class="flex items-center gap-3">
                 @auth
-                    @if(Auth::user()->hasAnyRole(['staff', 'admin']))
+                    @if(Auth::user()->hasRole('admin'))
+                        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 shadow-sm transition">
+                            Panel Admin
+                        </a>
+                    @elseif(Auth::user()->hasRole('staff'))
                         <a href="{{ route('staff.dashboard') }}" class="px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 shadow-sm transition">
                             Panel Petugas
                         </a>
                     @else
                         <a href="{{ route('student.beranda') }}" class="px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 shadow-sm transition">
-                            Beranda Saya
+                            Portal Mahasiswa
                         </a>
                     @endif
                 @else
@@ -129,8 +104,8 @@
                     <a href="{{ route('register') }}" class="px-7 py-3.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-base font-semibold shadow-lg shadow-teal-600/25 transition">
                         Mulai Pendaftaran
                     </a>
-                    <a href="{{ route('demo.login', 'admin') }}" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-base font-semibold shadow-xs transition">
-                        Masuk sebagai Admin
+                    <a href="#alur" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-base font-semibold shadow-xs transition">
+                        Pelajari Alur Skrining
                     </a>
                 </div>
 
@@ -351,7 +326,7 @@
                     </ul>
 
                     <div class="pt-2">
-                        <a href="{{ route('demo.login', 'staff') }}" class="inline-flex items-center gap-2 text-sm font-bold text-teal-700 hover:text-teal-800">
+                        <a href="{{ route('login') }}" class="inline-flex items-center gap-2 text-sm font-bold text-teal-700 hover:text-teal-800">
                             Masuk ke Panel Petugas Medis &rarr;
                         </a>
                     </div>
@@ -361,7 +336,7 @@
         </div>
     </section>
 
-    <!-- Footer matching Screenshot 4 -->
+    <!-- Footer -->
     <footer class="bg-white border-t border-slate-100 py-8 text-slate-500 text-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
@@ -375,11 +350,19 @@
                     <div class="text-[10px] uppercase font-semibold text-slate-400">SKRINING KESEHATAN PPKMB</div>
                 </div>
             </div>
-            <div class="text-slate-400 font-medium">
-                Sipkesma — Sistem Pelayanan Kesehatan Mahasiswa &copy; {{ date('Y') }}
+            <div class="flex items-center gap-6">
+                <a href="{{ route('login') }}" class="text-slate-500 hover:text-teal-600 transition font-medium">
+                    Portal Petugas & Administrator
+                </a>
+                <span class="text-slate-300">|</span>
+                <span class="text-slate-400 font-medium">
+                    Sipkesma &copy; {{ date('Y') }}
+                </span>
             </div>
         </div>
     </footer>
+
+    @include('partials.demo-switcher')
 
 </body>
 </html>

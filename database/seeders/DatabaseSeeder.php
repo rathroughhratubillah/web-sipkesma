@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@uinssc.ac.id'],
             [
                 'name' => 'Administrator PPKMB',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('admin123'),
             ]
         );
         $admin->syncRoles([$adminRole]);

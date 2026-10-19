@@ -19,7 +19,6 @@ class ProfileController extends Controller
             'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)' => [
                 'Informatika',
                 'Manajemen Pendidikan Islam',
-                'Matematika',
                 'Pendidikan Agama Islam',
                 'Pendidikan Bahasa Arab',
                 'Pendidikan Guru Madrasah Ibtidaiyah',
@@ -28,7 +27,7 @@ class ProfileController extends Controller
                 'PJJ Pendidikan Bahasa Arab',
                 'PJJ Pendidikan Guru Madrasah Ibtidaiyah',
                 'Tadris Bahasa Indonesia',
-                'Tadris Bahasa Inggris',
+                'Tadris Bahasa Inggris', 
                 'Tadris Biologi',
                 'Tadris Ilmu Pengetahuan Sosial',
                 'Tadris Kimia',

@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="24.0.0" type="device">
+  <diagram id="sipkesma_clean_v4" name="Alur Bisnis SIPKESMA">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="2200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!--  TITLE BAR                                  -->
+        <!-- ═══════════════════════════════════════════ -->
+        <mxCell id="ttl" value="&lt;b style='font-size:14px;'&gt;Swimlane Diagram&lt;/b&gt; &amp;ndash; Sistem Informasi Pelayanan Kesehatan Mahasiswa &lt;b&gt;(SIPKESMA)&lt;/b&gt;"
+          style="text;html=1;align=center;fillColor=#1a237e;fontColor=#ffffff;strokeColor=none;fontSize=13;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="10" y="10" width="1180" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!--  SWIMLANE COLUMN HEADERS (3 kolom)          -->
+        <!-- ═══════════════════════════════════════════ -->
+        <mxCell id="h1" value="&lt;div style='text-align:center;'&gt;&lt;b style='font-size:14px;'&gt;👤 Mahasiswa&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:10px;'&gt;(Aktor Utama)&lt;/span&gt;&lt;/div&gt;"
+          style="rounded=0;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=2;html=1;fontColor=#0d47a1;"
+          vertex="1" parent="1">
+          <mxGeometry x="10" y="57" width="340" height="52" as="geometry"/>
+        </mxCell>
+        <mxCell id="h2" value="&lt;div style='text-align:center;'&gt;&lt;b style='font-size:14px;'&gt;💻 Sistem&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:10px;'&gt;(SIPKESMA)&lt;/span&gt;&lt;/div&gt;"
+          style="rounded=0;fillColor=#c8e6c9;strokeColor=#2e7d32;strokeWidth=2;html=1;fontColor=#1b5e20;"
+          vertex="1" parent="1">
+          <mxGeometry x="350" y="57" width="320" height="52" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3" value="&lt;div style='text-align:center;'&gt;&lt;b style='font-size:14px;'&gt;👮 Petugas / Admin&lt;/b&gt;&lt;/div&gt;"
+          style="rounded=0;fillColor=#ffe0b2;strokeColor=#e65100;strokeWidth=2;html=1;fontColor=#bf360c;"
+          vertex="1" parent="1">
+          <mxGeometry x="670" y="57" width="520" height="52" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!--  LANE BACKGROUND FILLS                      -->
+        <!-- ═══════════════════════════════════════════ -->
+        <mxCell id="bg1" value="" style="rounded=0;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=1;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="10" y="109" width="340" height="2060" as="geometry"/>
+        </mxCell>
+        <mxCell id="bg2" value="" style="rounded=0;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=1;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="350" y="109" width="320" height="2060" as="geometry"/>
+        </mxCell>
+        <mxCell id="bg3" value="" style="rounded=0;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=1;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="670" y="109" width="520" height="2060" as="geometry"/>
+        </mxCell>
+
+        <!-- Lane vertical dividers -->
+        <mxCell id="dv1" value="" style="endArrow=none;startArrow=none;strokeColor=#1565c0;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="350" y="109" as="sourcePoint"/>
+            <mxPoint x="350" y="2169" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dv2" value="" style="endArrow=none;startArrow=none;strokeColor=#2e7d32;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="670" y="109" as="sourcePoint"/>
+            <mxPoint x="670" y="2169" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!--  KOLOM 1: MAHASISWA                         -->
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- START terminator: center_x=180, bottom=178 -->
+        <mxCell id="nd_st" value="Start"
+          style="ellipse;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#0d47a1;fontSize=12;fontStyle=1;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="140" y="142" width="80" height="36" as="geometry"/>
+        </mxCell>
+
+        <!-- M1: Membuka Website — y=200, bottom=244 -->
+        <mxCell id="m1" value="&lt;b&gt;Membuka Website SIPKESMA&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="200" width="270" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- M2: Mendaftar Akun — y=270, bottom=314 -->
+        <mxCell id="m2" value="&lt;b&gt;Mendaftar Akun&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="270" width="270" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- M3: Input Profil — y=340, bottom=384 -->
+        <mxCell id="m3" value="&lt;b&gt;Input Profil&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="340" width="270" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- M4: Kuesioner Kesehatan — y=410, bottom=454 -->
+        <mxCell id="m4" value="&lt;b&gt;Mengisi Kuesioner Kesehatan&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="410" width="270" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- M5: Pilih Sesi & Jadwal — y=480, bottom=524 -->
+        <mxCell id="m5" value="&lt;b&gt;Memilih Sesi &amp;amp; Booking Jadwal&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="480" width="270" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- M6: Melakukan Pembayaran — y=550, bottom=594 -->
+        <mxCell id="m6" value="&lt;b&gt;Melakukan Pembayaran&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="550" width="270" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- M7: Unggah Bukti Pembayaran — y=620, center_y=642, right=315, top=620 -->
+        <!-- LOOP TARGET dari rejection path -->
+        <mxCell id="m7" value="&lt;b&gt;Unggah Bukti Pembayaran&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=2.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="620" width="270" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- Label rejection: di kiri m7 -->
+        <mxCell id="lbl_rej" value="&lt;i style='color:#c62828;font-size:9px;'&gt;Tolak&lt;br/&gt;(unggah ulang)&lt;/i&gt;"
+          style="text;html=1;align=center;strokeColor=none;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="10" y="628" width="80" height="36" as="geometry"/>
+        </mxCell>
+
+        <!-- M8: Menerima Tiket QR — y=1050, top=1050 -->
+        <mxCell id="m8" value="&lt;b&gt;Menerima tiket QR &amp;amp; jadwal&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="1050" width="270" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- M9: Hadir di Lokasi — y=1130, right=315, center_y=1156, bottom=1182 -->
+        <mxCell id="m9" value="&lt;b&gt;Hadir di lokasi, menunjukkan tiket QR&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="1130" width="270" height="52" as="geometry"/>
+        </mxCell>
+
+        <!-- M10: Unduh Sertifikat — y=1880, top=1880 -->
+        <mxCell id="m10" value="&lt;b&gt;Menerima notifikasi &amp;amp; mengunduh sertifikat kesehatan&lt;/b&gt;"
+          style="rounded=2;arcSize=25;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="45" y="1880" width="270" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- END terminator: center_x=180, top=1980 -->
+        <mxCell id="nd_en" value="End"
+          style="ellipse;fillColor=#1a237e;fontColor=#ffffff;strokeColor=#0d47a1;fontSize=12;fontStyle=1;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="140" y="1980" width="80" height="38" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!--  KOLOM 2: SISTEM                            -->
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- S1: Generate Tiket QR — y=950, center=(510,981), left=375, bottom=1012 -->
+        <mxCell id="s1" value="&lt;div style='text-align:center;'&gt;🔲&lt;br/&gt;&lt;b&gt;Generate Tiket QR Checkup&lt;/b&gt;&lt;/div&gt;"
+          style="rounded=2;arcSize=12;fillColor=#a5d6a7;strokeColor=#2e7d32;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="375" y="950" width="270" height="62" as="geometry"/>
+        </mxCell>
+
+        <!-- S2: Update Hasil Checkup — y=1680, center=(510,1711), top=1680 -->
+        <mxCell id="s2" value="&lt;div style='text-align:center;'&gt;💾&lt;br/&gt;&lt;b&gt;Update Hasil Checkup&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:9px;'&gt;(menerima input dari 3 stasiun)&lt;/span&gt;&lt;/div&gt;"
+          style="rounded=2;arcSize=12;fillColor=#a5d6a7;strokeColor=#2e7d32;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="375" y="1680" width="270" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- S3: Generate Sertifikat — y=1790, left=375, center=(510,1820), bottom=1850 -->
+        <mxCell id="s3" value="&lt;div style='text-align:center;'&gt;📄&lt;br/&gt;&lt;b&gt;Generate Sertifikat Kesehatan Digital&lt;/b&gt;&lt;/div&gt;"
+          style="rounded=2;arcSize=12;fillColor=#a5d6a7;strokeColor=#2e7d32;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="375" y="1790" width="270" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!--  KOLOM 3: PETUGAS / ADMIN                   -->
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- P1: Verifikasi Bukti — y=740, center=(870,762), top=740, bottom=784 -->
+        <mxCell id="p1" value="&lt;b&gt;Verifikasi Bukti Pembayaran&lt;/b&gt;"
+          style="rounded=2;arcSize=20;fillColor=#ffe0b2;strokeColor=#e65100;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="740" y="740" width="260" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- D1: Decision "Bukti Valid?" — y=820, center=(870,856), bottom=892, right=940 -->
+        <mxCell id="d1" value="&lt;b&gt;Bukti Valid?&lt;/b&gt;"
+          style="rhombus;fillColor=#fff8e1;strokeColor=#f57f17;strokeWidth=2;fontSize=10;fontStyle=1;html=1;whiteSpace=wrap;"
+          vertex="1" parent="1">
+          <mxGeometry x="800" y="820" width="140" height="72" as="geometry"/>
+        </mxCell>
+
+        <!-- Label Ya & Tidak -->
+        <mxCell id="lbl_ya" value="&lt;b style='color:#2e7d32;font-size:10px;'&gt;Ya&lt;br/&gt;(Setujui)&lt;/b&gt;"
+          style="text;html=1;align=center;strokeColor=none;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="770" y="900" width="80" height="32" as="geometry"/>
+        </mxCell>
+        <mxCell id="lbl_tidak" value="&lt;b style='color:#c62828;font-size:10px;'&gt;Tidak&lt;br/&gt;(Tolak)&lt;/b&gt;"
+          style="text;html=1;align=left;strokeColor=none;fillColor=none;"
+          vertex="1" parent="1">
+          <mxGeometry x="946" y="840" width="70" height="32" as="geometry"/>
+        </mxCell>
+
+        <!-- P2: Scan QR Kehadiran — y=1210, center=(870,1236), top=1210, bottom=1262 -->
+        <mxCell id="p2" value="&lt;b&gt;Scan Tiket QR Mahasiswa &amp;amp; Verifikasi Kehadiran&lt;/b&gt;"
+          style="rounded=2;arcSize=20;fillColor=#ffe0b2;strokeColor=#e65100;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="740" y="1210" width="260" height="52" as="geometry"/>
+        </mxCell>
+
+        <!-- Station Group container — x=680, y=1300, w=500, h=210 -->
+        <mxCell id="st_grp" value="&lt;b style='color:#6a1b9a;font-size:10px;'&gt;Pemeriksaan 3 Stasiun (Fork / Join)&lt;/b&gt;"
+          style="rounded=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;strokeWidth=2;dashed=1;html=1;verticalAlign=top;spacingTop=5;fontSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="680" y="1300" width="500" height="220" as="geometry"/>
+        </mxCell>
+
+        <!-- Stasiun 1 — x=690, y=1330, w=148, h=140, center_x=764, bottom=1470 -->
+        <mxCell id="st1" value="&lt;b style='color:#283593;'&gt;Stasiun 1&lt;/b&gt;&lt;br/&gt;Cek Tanda Vital&lt;br/&gt;&lt;span style='font-size:8px;'&gt;(Tekanan Darah,&lt;br/&gt;Berat / Tinggi Badan)&lt;/span&gt;"
+          style="rounded=1;fillColor=#c5cae9;strokeColor=#283593;strokeWidth=1.5;fontSize=9;html=1;align=center;"
+          vertex="1" parent="1">
+          <mxGeometry x="690" y="1330" width="148" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- Stasiun 2 — x=858, y=1330, w=148, h=140, center_x=932, bottom=1470 -->
+        <mxCell id="st2" value="&lt;b style='color:#283593;'&gt;Stasiun 2&lt;/b&gt;&lt;br/&gt;Pengambilan&lt;br/&gt;Sampel Lab&lt;br/&gt;&lt;span style='font-size:8px;'&gt;(Darah, Urine)&lt;/span&gt;"
+          style="rounded=1;fillColor=#c5cae9;strokeColor=#283593;strokeWidth=1.5;fontSize=9;html=1;align=center;"
+          vertex="1" parent="1">
+          <mxGeometry x="858" y="1330" width="148" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- Stasiun 3 — x=1026, y=1330, w=148, h=140, center_x=1100, bottom=1470 -->
+        <mxCell id="st3" value="&lt;b style='color:#283593;'&gt;Stasiun 3&lt;/b&gt;&lt;br/&gt;Pemeriksaan Dokter&lt;br/&gt;&amp;amp; Diagnosis Akhir"
+          style="rounded=1;fillColor=#c5cae9;strokeColor=#283593;strokeWidth=1.5;fontSize=9;html=1;align=center;"
+          vertex="1" parent="1">
+          <mxGeometry x="1026" y="1330" width="148" height="140" as="geometry"/>
+        </mxCell>
+
+        <!-- P3: Input Hasil Checkup — x=780, y=1550, w=180, h=50, center=(870,1575), top=1550, left=780 -->
+        <mxCell id="p3" value="&lt;b&gt;Input Hasil Checkup&lt;/b&gt;&lt;br/&gt;&lt;span style='font-size:9px;'&gt;(ke sistem)&lt;/span&gt;"
+          style="rounded=2;arcSize=20;fillColor=#ffe0b2;strokeColor=#e65100;strokeWidth=1.5;fontSize=10;html=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="780" y="1550" width="180" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  EDGES — Semua garis terencana, TIDAK ADA yang saling bertabrakan -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+
+        <!--
+          PETA LEVEL HORIZONTAL (jalur per-Y, tidak bertabrakan):
+          • y=642 → rejection loop (Petugas kanan → Mahasiswa, masuk m7 kanan)
+          • y=700 → m7 keluar bawah → ke petugas p1 atas
+          • y=892 → Ya dari diamond → Sistem s1
+          • y=981 → s1 kiri → Mahasiswa m8
+          • y=1156 → m9 kanan → Petugas p2
+          • y=1550 → p3 kiri → Sistem s2
+          • y=1820 → s3 kiri → Mahasiswa m10
+        -->
+
+        <!-- ─── RANTAI VERTIKAL UTAMA MAHASISWA ─── -->
+        <!-- START → M1 -->
+        <mxCell id="e_st_m1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="nd_st" target="m1" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- M1 → M2 -->
+        <mxCell id="e_m1_m2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="m1" target="m2" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- M2 → M3 -->
+        <mxCell id="e_m2_m3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="m2" target="m3" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- M3 → M4 -->
+        <mxCell id="e_m3_m4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="m3" target="m4" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- M4 → M5 -->
+        <mxCell id="e_m4_m5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="m4" target="m5" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- M5 → M6 -->
+        <mxCell id="e_m5_m6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="m5" target="m6" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- M6 → M7 -->
+        <mxCell id="e_m6_m7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="m6" target="m7" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- M8 → M9 -->
+        <mxCell id="e_m8_m9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="m8" target="m9" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- M10 → END -->
+        <mxCell id="e_m10_en" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="m10" target="nd_en" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ─── RANTAI VERTIKAL SISTEM ─── -->
+        <!-- S2 → S3 -->
+        <mxCell id="e_s2_s3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#2e7d32;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="s2" target="s3" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ─── RANTAI VERTIKAL PETUGAS ─── -->
+        <!-- P1 → D1 -->
+        <mxCell id="e_p1_d1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#e65100;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="p1" target="d1" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!--  JALUR 1 (y=700): M7 keluar bawah → P1 atas    -->
+        <!--  Route: (180,664)→(180,700)→(870,700)→(870,740) -->
+        <!-- ════════════════════════════════════════════════ -->
+        <mxCell id="e_m7_p1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#546e7a;strokeWidth=1.5;endArrow=block;endFill=1;html=1;dashed=1;" edge="1" source="m7" target="p1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="700"/>
+              <mxPoint x="870" y="700"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  JALUR REJECTION (y=642): D1 kanan → outer kanan → m7 kanan    -->
+        <!--  Route: (940,856)→(1020,856)→(1020,642)→(315,642) masuk m7.kanan -->
+        <!--  NOTE: y=642 BEDA dari jalur m7→p1 (y=700). TIDAK ada tabrakan.  -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <mxCell id="e_tidak" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;arcSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#c62828;strokeWidth=2;endArrow=block;endFill=1;html=1;dashed=1;" edge="1" source="d1" target="m7" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1020" y="856"/>
+              <mxPoint x="1020" y="642"/>
+              <mxPoint x="315" y="642"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!--  JALUR YA (y=892): D1 bawah → kiri → S1 atas          -->
+        <!--  Route: (870,892)→(510,892)→(510,950)  masuk s1.atas  -->
+        <!--  NOTE: y=892 BEDA dari semua jalur lain. TIDAK tabrakan. -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="e_ya" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#2e7d32;strokeWidth=2;endArrow=block;endFill=1;html=1;" edge="1" source="d1" target="s1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="892"/>
+              <mxPoint x="510" y="892"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!--  JALUR S1→M8 (y=981): S1 kiri → M8 atas                    -->
+        <!--  Route: (375,981)→(180,981)→(180,1050)  masuk m8.atas      -->
+        <!--  s1: y=950, h=62, center_y=981                              -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <mxCell id="e_s1_m8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#2e7d32;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="s1" target="m8" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="981"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!--  JALUR M9→P2 (y=1156): M9 kanan → P2 atas                  -->
+        <!--  Route: (315,1156)→(870,1156)→(870,1210) masuk p2.atas     -->
+        <!--  m9: y=1130, h=52, center_y=1156                            -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <mxCell id="e_m9_p2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#546e7a;strokeWidth=1.5;endArrow=block;endFill=1;html=1;dashed=1;" edge="1" source="m9" target="p2" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="1156"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════════════════════ -->
+        <!--  FORK: P2 bawah → 3 stasiun (3 jalur berbeda X di y=1295)          -->
+        <!--  p2 bottom=1262, fork_y=1295                                        -->
+        <!--  st1 center_x=764, st2 center_x=932, st3 center_x=1100             -->
+        <!--  Jalur fork di y=1295: [764..805], [870..932], [935..1100] NO CROSS -->
+        <!-- ════════════════════════════════════════════════════════════════════ -->
+
+        <!-- P2 → Stasiun 1: exit exitX=0.25 (x=805) → kiri ke x=764 → bawah st1 -->
+        <mxCell id="e_p2_st1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#7b1fa2;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="p2" target="st1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="805" y="1295"/>
+              <mxPoint x="764" y="1295"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- P2 → Stasiun 2: exit exitX=0.5 (x=870) → kanan ke x=932 → bawah st2 -->
+        <mxCell id="e_p2_st2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#7b1fa2;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="p2" target="st2" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="1295"/>
+              <mxPoint x="932" y="1295"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- P2 → Stasiun 3: exit exitX=0.75 (x=935) → kanan ke x=1100 → bawah st3 -->
+        <mxCell id="e_p2_st3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#7b1fa2;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="p2" target="st3" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="935" y="1295"/>
+              <mxPoint x="1100" y="1295"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════ -->
+        <!--  JOIN: 3 stasiun → P3 (jalur berbeda X di y=1510, TIDAK ADA tabrakan) -->
+        <!--  Rute join di y=1510: st1[764..798], st2[870..932], st3[942..1100]    -->
+        <!--  p3: x=780,w=180 → entryX=0.1→x=798, entryX=0.5→x=870, entryX=0.9→x=942 -->
+        <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+        <!-- Stasiun 1 → P3: bawah st1(764,1470) → (764,1510) → (798,1510) → p3 atas x=798 -->
+        <mxCell id="e_st1_p3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.1;entryY=0;entryDx=0;entryDy=0;strokeColor=#7b1fa2;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="st1" target="p3" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="764" y="1510"/>
+              <mxPoint x="798" y="1510"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Stasiun 2 → P3: bawah st2(932,1470) → (932,1510) → (870,1510) → p3 atas x=870 -->
+        <mxCell id="e_st2_p3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#7b1fa2;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="st2" target="p3" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="932" y="1510"/>
+              <mxPoint x="870" y="1510"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Stasiun 3 → P3: bawah st3(1100,1470) → (1100,1510) → (942,1510) → p3 atas x=942 -->
+        <mxCell id="e_st3_p3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.9;entryY=0;entryDx=0;entryDy=0;strokeColor=#7b1fa2;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="st3" target="p3" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="1510"/>
+              <mxPoint x="942" y="1510"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  JALUR P3→S2 (y=1575): P3 kiri → S2 atas                      -->
+        <!--  Route: (780,1575)→(510,1575)→(510,1680)  masuk s2.atas       -->
+        <!--  p3: y=1550,h=50 → center_y=1575, left=780                    -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <mxCell id="e_p3_s2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#2e7d32;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="p3" target="s2" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="1575"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  JALUR S3→M10 (y=1820): S3 kiri → M10 atas                    -->
+        <!--  Route: (375,1820)→(180,1820)→(180,1880)  masuk m10.atas      -->
+        <!--  s3: y=1790,h=60 → center_y=1820, left=375                    -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <mxCell id="e_s3_m10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#1565c0;strokeWidth=1.8;endArrow=block;endFill=1;html=1;" edge="1" source="s3" target="m10" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="1820"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ════════════════════════════ -->
+        <!--  LEGENDA                    -->
+        <!-- ════════════════════════════ -->
+        <mxCell id="leg_bg" value="" style="rounded=1;fillColor=#fafafa;strokeColor=#bdbdbd;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="10" y="2110" width="460" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_ttl" value="&lt;b&gt;Legenda:&lt;/b&gt;" style="text;html=1;fontSize=10;align=left;" vertex="1" parent="1">
+          <mxGeometry x="14" y="2114" width="60" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1" value="" style="rounded=2;fillColor=#bbdefb;strokeColor=#1565c0;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="75" y="2118" width="24" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1t" value="Proses Mahasiswa" style="text;html=1;fontSize=9;align=left;" vertex="1" parent="1">
+          <mxGeometry x="102" y="2114" width="100" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2" value="" style="rounded=2;fillColor=#a5d6a7;strokeColor=#2e7d32;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="205" y="2118" width="24" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2t" value="Proses Sistem" style="text;html=1;fontSize=9;align=left;" vertex="1" parent="1">
+          <mxGeometry x="232" y="2114" width="80" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3" value="" style="rounded=2;fillColor=#ffe0b2;strokeColor=#e65100;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="315" y="2118" width="24" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3t" value="Proses Petugas" style="text;html=1;fontSize=9;align=left;" vertex="1" parent="1">
+          <mxGeometry x="342" y="2114" width="80" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg4" value="" style="rhombus;fillColor=#fff8e1;strokeColor=#f57f17;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="14" y="2135" width="18" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg4t" value="Keputusan / Kondisi" style="text;html=1;fontSize=9;align=left;" vertex="1" parent="1">
+          <mxGeometry x="36" y="2137" width="100" height="16" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

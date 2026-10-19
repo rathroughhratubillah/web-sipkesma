@@ -209,6 +209,8 @@
         </main>
     </div>
 
+    @include('partials.demo-switcher')
+
     @stack('scripts')
 </body>
 </html>

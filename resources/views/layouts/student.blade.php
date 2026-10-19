@@ -27,35 +27,6 @@
 </head>
 <body class="min-h-screen text-slate-800 flex flex-col antialiased">
     
-    <!-- Demo Quick Switcher Banner (For easy grading & multi-role testing) -->
-    <div class="bg-slate-900 text-slate-200 text-xs py-1.5 px-4">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">
-                    Mode Pengujian / Demo
-                </span>
-                <span class="hidden sm:inline text-slate-400">Pilih profil uji coba langsung:</span>
-            </div>
-            <div class="flex items-center gap-1.5 flex-wrap">
-                <a href="{{ route('demo.login', 'ratu') }}" class="px-2 py-1 rounded bg-teal-800/60 hover:bg-teal-700 text-teal-200 transition">
-                    Ratu (Baru / Draft)
-                </a>
-                <a href="{{ route('demo.login', 'budi') }}" class="px-2 py-1 rounded bg-teal-800/60 hover:bg-teal-700 text-teal-200 transition">
-                    Budi (Tiket Antrean)
-                </a>
-                <a href="{{ route('demo.login', 'siti') }}" class="px-2 py-1 rounded bg-teal-800/60 hover:bg-teal-700 text-teal-200 transition">
-                    Siti (Lulus Sertifikat)
-                </a>
-                <a href="{{ route('demo.login', 'staff') }}" class="px-2 py-1 rounded bg-amber-800/60 hover:bg-amber-700 text-amber-200 transition">
-                    dr. Nurul (Petugas Medis)
-                </a>
-                <a href="{{ route('demo.login', 'admin') }}" class="px-2 py-1 rounded bg-purple-800/60 hover:bg-purple-700 text-purple-200 transition">
-                    Admin
-                </a>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Navigation Bar -->
     <header class="bg-white border-b border-slate-100 shadow-xs sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -185,6 +156,8 @@
             </div>
         </div>
     </footer>
+
+    @include('partials.demo-switcher')
 
     @stack('scripts')
 </body>

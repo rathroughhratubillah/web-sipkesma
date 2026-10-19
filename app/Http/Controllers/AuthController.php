@@ -22,18 +22,42 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $validated = $request->validate([
+            'email' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        $loginInput = trim($validated['email']);
+        $password = $validated['password'];
+
+        // 1. Cari user berdasarkan email (case-insensitive) atau nama
+        $user = User::whereRaw('LOWER(email) = ?', [strtolower($loginInput)])
+            ->orWhereRaw('LOWER(name) = ?', [strtolower($loginInput)])
+            ->first();
+
+        // 2. Alias khusus admin (admin, administrator, admin@gmail.com, admin@uinssc.ac.id)
+        if (!$user && in_array(strtolower($loginInput), ['admin', 'administrator', 'admin@gmail.com', 'admin@uinssc.ac.id'])) {
+            $user = User::whereHas('roles', fn($q) => $q->where('name', 'admin'))
+                ->orWhere('email', 'admin@uinssc.ac.id')
+                ->first();
+        }
+
+        // 3. Alias khusus petugas medis (petugas, petugas@uinssc.ac.id, petugas@gmail.com)
+        if (!$user && in_array(strtolower($loginInput), ['petugas', 'petugas@uinssc.ac.id', 'petugas@gmail.com'])) {
+            $user = User::whereHas('roles', fn($q) => $q->where('name', 'staff'))
+                ->orWhere('email', 'petugas@uinssc.ac.id')
+                ->first();
+        }
+
+        // 4. Verifikasi kecocokan password
+        if ($user && Hash::check($password, $user->password)) {
+            Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
-            return $this->redirectBasedOnRole(Auth::user());
+            return $this->redirectBasedOnRole($user);
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan tidak sesuai.',
+            'email' => 'Email/Nama atau password yang Anda masukkan tidak sesuai.',
         ])->onlyInput('email');
     }
 
@@ -182,7 +206,10 @@ class AuthController extends Controller
 
     protected function redirectBasedOnRole(User $user)
     {
-        if ($user->hasRole('admin') || $user->hasRole('staff')) {
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        }
+        if ($user->hasRole('staff')) {
             return redirect()->route('staff.dashboard');
         }
         return redirect()->route('student.beranda');
