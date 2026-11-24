@@ -56,6 +56,7 @@ class DatabaseSeeder extends Seeder
             ['session_name' => 'Sesi Pagi Gelombang 1 (08:00 - 10:00)'],
             [
                 'session_date' => Carbon::today()->addDays(1)->format('Y-m-d'),
+                'academic_year' => 2026,
                 'start_time' => '08:00:00',
                 'end_time' => '10:00:00',
                 'quota' => 100,
@@ -67,6 +68,7 @@ class DatabaseSeeder extends Seeder
             ['session_name' => 'Sesi Siang Gelombang 1 (10:30 - 12:30)'],
             [
                 'session_date' => Carbon::today()->addDays(1)->format('Y-m-d'),
+                'academic_year' => 2026,
                 'start_time' => '10:30:00',
                 'end_time' => '12:30:00',
                 'quota' => 100,
@@ -78,10 +80,37 @@ class DatabaseSeeder extends Seeder
             ['session_name' => 'Sesi Pagi Gelombang 2 (08:00 - 10:00)'],
             [
                 'session_date' => Carbon::today()->addDays(2)->format('Y-m-d'),
+                'academic_year' => 2026,
                 'start_time' => '08:00:00',
                 'end_time' => '10:00:00',
                 'quota' => 120,
                 'is_active' => true,
+            ]
+        );
+
+        // Sesi Tahun 2025 (Data Historis PPKMB 2025)
+        $session2025 = TestSession::firstOrCreate(
+            ['session_name' => 'Sesi Terpadu PPKMB 2025 (08:00 - 12:00)'],
+            [
+                'session_date' => '2025-08-18',
+                'academic_year' => 2025,
+                'start_time' => '08:00:00',
+                'end_time' => '12:00:00',
+                'quota' => 150,
+                'is_active' => false,
+            ]
+        );
+
+        // Sesi Tahun 2024 (Data Historis PPKMB 2024)
+        $session2024 = TestSession::firstOrCreate(
+            ['session_name' => 'Sesi Terpadu PPKMB 2024 (08:00 - 12:00)'],
+            [
+                'session_date' => '2024-08-15',
+                'academic_year' => 2024,
+                'start_time' => '08:00:00',
+                'end_time' => '12:00:00',
+                'quota' => 200,
+                'is_active' => false,
             ]
         );
 
@@ -427,9 +456,423 @@ class DatabaseSeeder extends Seeder
                     ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Kondisi fisik prima, tensi 118/76 mmHg, tidak buta warna.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
                 ],
             ],
+
+            // ============================================================
+            // DATA HISTORIS TAHUN 2025 (PPKMB 2025)
+            // ============================================================
+            [
+                'academic_year' => 2025,
+                'created_at' => '2025-08-18 08:30:00',
+                'name' => 'Ilham Pratama',
+                'email' => 'ilham2025@uinssc.ac.id',
+                'nim' => '2025101001',
+                'full_name' => 'Muhammad Ilham Pratama',
+                'faculty' => 'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)',
+                'major' => 'Informatika',
+                'phone' => '081288990011',
+                'gender' => 'L',
+                'birth_date' => '2006-03-21',
+                'address' => 'Jl. Kolonel Atmo No. 45, Palembang',
+                'health' => [
+                    'blood_type' => 'O', 'rhesus' => '+', 'height_cm' => 172, 'weight_kg' => 64,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Pratama Senior (Ayah)', 'emergency_contact_phone' => '081277665544',
+                ],
+                'session' => $session2025,
+                'status' => 'completed',
+                'queue_code' => '2025-A-001',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'SeaBank',
+                    'sender_name' => 'Ilham Pratama',
+                    'verified_at' => Carbon::parse('2025-08-18 09:00:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat dan fit.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+            [
+                'academic_year' => 2025,
+                'created_at' => '2025-08-18 08:45:00',
+                'name' => 'Anisa Rahmawati',
+                'email' => 'anisa2025@uinssc.ac.id',
+                'nim' => '2025101002',
+                'full_name' => 'Anisa Rahmawati',
+                'faculty' => 'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)',
+                'major' => 'Pendidikan Agama Islam',
+                'phone' => '081399887711',
+                'gender' => 'P',
+                'birth_date' => '2006-07-14',
+                'address' => 'Jl. Demang Lebar Daun No. 22, Palembang',
+                'health' => [
+                    'blood_type' => 'A', 'rhesus' => '+', 'height_cm' => 160, 'weight_kg' => 52,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Hj. Mardiah (Ibu)', 'emergency_contact_phone' => '081377889900',
+                ],
+                'session' => $session2025,
+                'status' => 'completed',
+                'queue_code' => '2025-A-002',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'DANA',
+                    'sender_name' => 'Anisa Rahmawati',
+                    'verified_at' => Carbon::parse('2025-08-18 09:15:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat dan fit.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+            [
+                'academic_year' => 2025,
+                'created_at' => '2025-08-18 09:00:00',
+                'name' => 'Fajar Hidayat',
+                'email' => 'fajar2025@uinssc.ac.id',
+                'nim' => '2025201001',
+                'full_name' => 'Fajar Hidayatullah',
+                'faculty' => 'Fakultas Ekonomi Dan Bisnis Islam (FEBI)',
+                'major' => 'Perbankan Syariah',
+                'phone' => '081255667788',
+                'gender' => 'L',
+                'birth_date' => '2006-11-05',
+                'address' => 'Jl. Veteran No. 108, Palembang',
+                'health' => [
+                    'blood_type' => 'B', 'rhesus' => '+', 'height_cm' => 168, 'weight_kg' => 60,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Hidayat (Ayah)', 'emergency_contact_phone' => '081244556677',
+                ],
+                'session' => $session2025,
+                'status' => 'completed',
+                'queue_code' => '2025-A-003',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'SeaBank',
+                    'sender_name' => 'Fajar Hidayat',
+                    'verified_at' => Carbon::parse('2025-08-18 09:30:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+            [
+                'academic_year' => 2025,
+                'created_at' => '2025-08-18 09:30:00',
+                'name' => 'Nabila Syahrini',
+                'email' => 'nabila2025@uinssc.ac.id',
+                'nim' => '2025301001',
+                'full_name' => 'Nabila Syahrini Putri',
+                'faculty' => 'Fakultas Syariah',
+                'major' => "Hukum Ekonomi Syari'ah (Muamalah)",
+                'phone' => '081344556677',
+                'gender' => 'P',
+                'birth_date' => '2006-08-19',
+                'address' => 'Jl. R. Sukamto No. 88, Palembang',
+                'health' => [
+                    'blood_type' => 'AB', 'rhesus' => '+', 'height_cm' => 163, 'weight_kg' => 54,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Syahrini (Ibu)', 'emergency_contact_phone' => '081333445566',
+                ],
+                'session' => $session2025,
+                'status' => 'completed',
+                'queue_code' => '2025-A-004',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'DANA',
+                    'sender_name' => 'Nabila Syahrini',
+                    'verified_at' => Carbon::parse('2025-08-18 10:00:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat prima.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+            [
+                'academic_year' => 2025,
+                'created_at' => '2025-08-18 10:00:00',
+                'name' => 'Bagus Setiawan',
+                'email' => 'bagus2025@uinssc.ac.id',
+                'nim' => '2025401001',
+                'full_name' => 'Bagus Setiawan',
+                'faculty' => 'Fakultas Dakwah Dan Komunikasi Islam (FDKI)',
+                'major' => 'Komunikasi dan Penyiaran Islam',
+                'phone' => '081211223344',
+                'gender' => 'L',
+                'birth_date' => '2006-05-12',
+                'address' => 'Jl. Basuki Rahmat No. 71, Palembang',
+                'health' => [
+                    'blood_type' => 'O', 'rhesus' => '+', 'height_cm' => 175, 'weight_kg' => 70,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Setiawan (Ayah)', 'emergency_contact_phone' => '081299001122',
+                ],
+                'session' => $session2025,
+                'status' => 'cleared',
+                'queue_code' => '2025-A-005',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'SeaBank',
+                    'sender_name' => 'Bagus Setiawan',
+                    'verified_at' => Carbon::parse('2025-08-18 10:30:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => null,
+            ],
+            [
+                'academic_year' => 2025,
+                'created_at' => '2025-08-18 10:30:00',
+                'name' => 'Zahra Nur Fadilah',
+                'email' => 'zahra2025@uinssc.ac.id',
+                'nim' => '2025501001',
+                'full_name' => 'Zahra Nur Fadilah',
+                'faculty' => 'Fakultas Ushuluddin Dan Arab',
+                'major' => "Ilmu Al-Qur'an dan Tafsir",
+                'phone' => '081388990022',
+                'gender' => 'P',
+                'birth_date' => '2006-09-08',
+                'address' => 'Jl. Kapten A. Rivai No. 15, Palembang',
+                'health' => [
+                    'blood_type' => 'A', 'rhesus' => '+', 'height_cm' => 158, 'weight_kg' => 48,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Fadilah (Ayah)', 'emergency_contact_phone' => '081377889911',
+                ],
+                'session' => $session2025,
+                'status' => 'completed',
+                'queue_code' => '2025-A-006',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'SeaBank',
+                    'sender_name' => 'Zahra Nur Fadilah',
+                    'verified_at' => Carbon::parse('2025-08-18 11:00:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat dan fit.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+
+            // ============================================================
+            // DATA HISTORIS TAHUN 2024 (PPKMB 2024)
+            // ============================================================
+            [
+                'academic_year' => 2024,
+                'created_at' => '2024-08-15 08:30:00',
+                'name' => 'Rizka Amelia',
+                'email' => 'rizka2024@uinssc.ac.id',
+                'nim' => '2024101001',
+                'full_name' => 'Rizka Amelia Putri',
+                'faculty' => 'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)',
+                'major' => 'Informatika',
+                'phone' => '081266778899',
+                'gender' => 'P',
+                'birth_date' => '2005-04-10',
+                'address' => 'Jl. MP Mangkunegara No. 19, Palembang',
+                'health' => [
+                    'blood_type' => 'B', 'rhesus' => '+', 'height_cm' => 161, 'weight_kg' => 51,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Amelia (Ibu)', 'emergency_contact_phone' => '081255667788',
+                ],
+                'session' => $session2024,
+                'status' => 'completed',
+                'queue_code' => '2024-A-001',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'SeaBank',
+                    'sender_name' => 'Rizka Amelia',
+                    'verified_at' => Carbon::parse('2024-08-15 09:00:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat dan fit.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+            [
+                'academic_year' => 2024,
+                'created_at' => '2024-08-15 08:45:00',
+                'name' => 'Aditya Nugraha',
+                'email' => 'aditya2024@uinssc.ac.id',
+                'nim' => '2024201001',
+                'full_name' => 'Aditya Nugraha Pratama',
+                'faculty' => 'Fakultas Ekonomi Dan Bisnis Islam (FEBI)',
+                'major' => 'Akuntansi Syariah',
+                'phone' => '081377889933',
+                'gender' => 'L',
+                'birth_date' => '2005-08-25',
+                'address' => 'Jl. Letkol Iskandar No. 33, Palembang',
+                'health' => [
+                    'blood_type' => 'O', 'rhesus' => '+', 'height_cm' => 170, 'weight_kg' => 63,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Nugraha (Ayah)', 'emergency_contact_phone' => '081366778822',
+                ],
+                'session' => $session2024,
+                'status' => 'completed',
+                'queue_code' => '2024-A-002',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'DANA',
+                    'sender_name' => 'Aditya Nugraha',
+                    'verified_at' => Carbon::parse('2024-08-15 09:15:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat dan fit.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+            [
+                'academic_year' => 2024,
+                'created_at' => '2024-08-15 09:00:00',
+                'name' => 'Tri Wahyuni',
+                'email' => 'tri2024@uinssc.ac.id',
+                'nim' => '2024301001',
+                'full_name' => 'Tri Wahyuni Astuti',
+                'faculty' => 'Fakultas Syariah',
+                'major' => 'Ilmu Falak',
+                'phone' => '081299881122',
+                'gender' => 'P',
+                'birth_date' => '2005-12-02',
+                'address' => 'Jl. Jenderal Sudirman KM 5, Palembang',
+                'health' => [
+                    'blood_type' => 'A', 'rhesus' => '+', 'height_cm' => 159, 'weight_kg' => 49,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Astuti (Ibu)', 'emergency_contact_phone' => '081288776655',
+                ],
+                'session' => $session2024,
+                'status' => 'completed',
+                'queue_code' => '2024-A-003',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'SeaBank',
+                    'sender_name' => 'Tri Wahyuni',
+                    'verified_at' => Carbon::parse('2024-08-15 09:30:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+            [
+                'academic_year' => 2024,
+                'created_at' => '2024-08-15 09:30:00',
+                'name' => 'Dwi Cahyono',
+                'email' => 'dwi2024@uinssc.ac.id',
+                'nim' => '2024401001',
+                'full_name' => 'Dwi Cahyono',
+                'faculty' => 'Fakultas Dakwah Dan Komunikasi Islam (FDKI)',
+                'major' => 'Bimbingan dan Konseling Islam',
+                'phone' => '081322334455',
+                'gender' => 'L',
+                'birth_date' => '2005-06-18',
+                'address' => 'Jl. Residen H. Abdul Rozak No. 12, Palembang',
+                'health' => [
+                    'blood_type' => 'AB', 'rhesus' => '+', 'height_cm' => 174, 'weight_kg' => 67,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Cahyono (Ayah)', 'emergency_contact_phone' => '081311223344',
+                ],
+                'session' => $session2024,
+                'status' => 'completed',
+                'queue_code' => '2024-A-004',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'SeaBank',
+                    'sender_name' => 'Dwi Cahyono',
+                    'verified_at' => Carbon::parse('2024-08-15 10:00:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat dan fit.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
+            [
+                'academic_year' => 2024,
+                'created_at' => '2024-08-15 10:00:00',
+                'name' => 'Fitri Handayani',
+                'email' => 'fitri2024@uinssc.ac.id',
+                'nim' => '2024501001',
+                'full_name' => 'Fitri Handayani',
+                'faculty' => 'Fakultas Ushuluddin Dan Arab',
+                'major' => 'Sejarah Peradaban Islam',
+                'phone' => '081277665511',
+                'gender' => 'P',
+                'birth_date' => '2005-09-30',
+                'address' => 'Jl. POM IX No. 6, Palembang',
+                'health' => [
+                    'blood_type' => 'O', 'rhesus' => '+', 'height_cm' => 164, 'weight_kg' => 53,
+                    'allergies' => 'Tidak ada', 'chronic_diseases' => 'Tidak ada', 'current_medications' => 'Tidak ada',
+                    'past_surgeries' => 'Tidak ada', 'is_smoker' => false, 'vaccine_status' => 'Lengkap (Booster ke-1)',
+                    'emergency_contact_name' => 'Handayani (Ibu)', 'emergency_contact_phone' => '081266554433',
+                ],
+                'session' => $session2024,
+                'status' => 'completed',
+                'queue_code' => '2024-A-005',
+                'payment' => [
+                    'amount' => 150000,
+                    'proof_file_path' => 'proofs/sample.jpg',
+                    'status' => 'verified',
+                    'bank_name' => 'DANA',
+                    'sender_name' => 'Fitri Handayani',
+                    'verified_at' => Carbon::parse('2024-08-15 10:30:00'),
+                    'verified_by' => $staff->id,
+                ],
+                'stations' => [
+                    ['station_name' => 'urin', 'status' => 'pass', 'notes' => 'Normal.', 'examiner_name' => 'dr. Hendra Sp.PK'],
+                    ['station_name' => 'napza', 'status' => 'pass', 'notes' => 'Negatif 6 parameter.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                    ['station_name' => 'pemeriksaan', 'status' => 'pass', 'notes' => 'Sehat dan fit.', 'examiner_name' => 'dr. Nurul Aini, Sp.PK'],
+                ],
+            ],
         ];
 
         foreach ($studentsData as $data) {
+            $regYear = $data['academic_year'] ?? 2026;
+            $regDate = isset($data['created_at']) ? Carbon::parse($data['created_at']) : Carbon::now();
+
             $user = User::firstOrCreate(
                 ['email' => $data['email']],
                 [
@@ -439,9 +882,11 @@ class DatabaseSeeder extends Seeder
             );
             $user->syncRoles([$studentRole]);
 
-            Profile::updateOrCreate(
-                ['user_id' => $user->id],
-                [
+            // Match profile by user_id OR by nim to avoid duplicate entry error
+            $profile = Profile::where('user_id', $user->id)->orWhere('nim', $data['nim'])->first();
+            if ($profile) {
+                $profile->update([
+                    'user_id' => $user->id,
                     'nim' => $data['nim'],
                     'full_name' => $data['full_name'],
                     'faculty' => $data['faculty'],
@@ -450,52 +895,95 @@ class DatabaseSeeder extends Seeder
                     'gender' => $data['gender'],
                     'birth_date' => $data['birth_date'],
                     'address' => $data['address'],
-                ]
-            );
+                ]);
+            } else {
+                $profile = Profile::create([
+                    'user_id' => $user->id,
+                    'nim' => $data['nim'],
+                    'full_name' => $data['full_name'],
+                    'faculty' => $data['faculty'],
+                    'major' => $data['major'],
+                    'phone' => $data['phone'],
+                    'gender' => $data['gender'],
+                    'birth_date' => $data['birth_date'],
+                    'address' => $data['address'],
+                ]);
+            }
+            if (isset($data['created_at'])) {
+                $profile->timestamps = false;
+                $profile->created_at = $regDate;
+                $profile->updated_at = $regDate;
+                $profile->save();
+            }
 
             if (!empty($data['health'])) {
-                HealthHistory::updateOrCreate(
+                $health = HealthHistory::updateOrCreate(
                     ['user_id' => $user->id],
                     $data['health']
                 );
+                if (isset($data['created_at'])) {
+                    $health->timestamps = false;
+                    $health->created_at = $regDate;
+                    $health->updated_at = $regDate;
+                    $health->save();
+                }
             }
 
             $regData = [
                 'test_session_id' => $data['session']->id,
+                'academic_year' => $regYear,
                 'status' => $data['status'],
                 'queue_code' => $data['queue_code'],
             ];
 
             if ($data['status'] === 'completed') {
-                $regData['checked_in_at'] = Carbon::now()->subHours(4);
-                $regData['completed_at'] = Carbon::now()->subHours(1);
+                $regData['checked_in_at'] = (clone $regDate)->subHours(4);
+                $regData['completed_at'] = (clone $regDate)->subHours(1);
             } elseif ($data['status'] === 'in_progress') {
-                $regData['checked_in_at'] = Carbon::now()->subHours(2);
+                $regData['checked_in_at'] = (clone $regDate)->subHours(2);
             }
 
             $registration = Registration::updateOrCreate(
                 ['user_id' => $user->id],
                 $regData
             );
+            if (isset($data['created_at'])) {
+                $registration->timestamps = false;
+                $registration->created_at = $regDate;
+                $registration->updated_at = $regDate;
+                $registration->save();
+            }
 
             if (!empty($data['payment'])) {
-                Payment::updateOrCreate(
+                $payment = Payment::updateOrCreate(
                     ['registration_id' => $registration->id],
                     $data['payment']
                 );
+                if (isset($data['created_at'])) {
+                    $payment->timestamps = false;
+                    $payment->created_at = $regDate;
+                    $payment->updated_at = $regDate;
+                    $payment->save();
+                }
             }
 
             if (!empty($data['stations'])) {
                 foreach ($data['stations'] as $st) {
-                    StationResult::updateOrCreate(
+                    $stationRes = StationResult::updateOrCreate(
                         ['registration_id' => $registration->id, 'station_name' => $st['station_name']],
                         [
                             'status' => $st['status'],
                             'notes' => $st['notes'],
                             'examiner_name' => $st['examiner_name'],
-                            'examined_at' => Carbon::now()->subHours(2),
+                            'examined_at' => (clone $regDate)->subHours(2),
                         ]
                     );
+                    if (isset($data['created_at'])) {
+                        $stationRes->timestamps = false;
+                        $stationRes->created_at = $regDate;
+                        $stationRes->updated_at = $regDate;
+                        $stationRes->save();
+                    }
                 }
             }
         }

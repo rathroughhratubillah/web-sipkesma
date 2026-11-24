@@ -16,8 +16,14 @@ class PaymentVerificationController extends Controller
     {
         $status = $request->get('status', 'pending');
         $method = $request->get('method', 'all');
+        $selectedYear = $request->get('year', 'all');
+        $availableYears = Registration::getAvailableYears();
 
         $query = Payment::with(['registration.user.profile', 'registration.testSession', 'verifier']);
+
+        if ($selectedYear && $selectedYear !== 'all') {
+            $query->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
 
         if ($status !== 'all') {
             $query->where('status', $status);
@@ -29,15 +35,20 @@ class PaymentVerificationController extends Controller
 
         $payments = $query->latest()->paginate(15)->withQueryString();
 
+        $baseCountQuery = Payment::query();
+        if ($selectedYear && $selectedYear !== 'all') {
+            $baseCountQuery->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
+
         $counts = [
-            'pending' => Payment::where('status', 'pending')->count(),
-            'verified' => Payment::where('status', 'verified')->count(),
-            'rejected' => Payment::where('status', 'rejected')->count(),
-            'seabank' => Payment::where('bank_name', 'like', '%SeaBank%')->count(),
-            'dana' => Payment::where('bank_name', 'like', '%DANA%')->count(),
+            'pending' => (clone $baseCountQuery)->where('status', 'pending')->count(),
+            'verified' => (clone $baseCountQuery)->where('status', 'verified')->count(),
+            'rejected' => (clone $baseCountQuery)->where('status', 'rejected')->count(),
+            'seabank' => (clone $baseCountQuery)->where('bank_name', 'like', '%SeaBank%')->count(),
+            'dana' => (clone $baseCountQuery)->where('bank_name', 'like', '%DANA%')->count(),
         ];
 
-        return view('staff.payments.index', compact('payments', 'status', 'method', 'counts'));
+        return view('staff.payments.index', compact('payments', 'status', 'method', 'counts', 'selectedYear', 'availableYears'));
     }
 
     public function approve(Payment $payment)

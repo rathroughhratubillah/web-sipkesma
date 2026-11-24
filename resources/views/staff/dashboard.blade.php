@@ -6,6 +6,46 @@
 @section('content')
 <div class="space-y-6">
 
+    {{-- FILTER TAHUN AKADEMIK / ANGKATAN --}}
+    <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-base shrink-0">
+                🗓️
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h3 class="text-sm font-bold text-slate-900">Filter Tahun Akademik PPKMB</h3>
+                    @if(($selectedYear ?? 'all') !== 'all')
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800">
+                            Tahun {{ $selectedYear }}
+                        </span>
+                    @else
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">
+                            Semua Tahun
+                        </span>
+                    @endif
+                </div>
+                <p class="text-xs text-slate-500">Melihat ringkasan operasional dan data mahasiswa per tahun angkatan</p>
+            </div>
+        </div>
+        <form method="GET" action="{{ route('staff.dashboard') }}" class="flex items-center gap-2 shrink-0">
+            <label for="year-select" class="text-xs font-semibold text-slate-600">Pilih Tahun:</label>
+            <select id="year-select" name="year" onchange="this.form.submit()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                <option value="all" {{ ($selectedYear ?? 'all') === 'all' ? 'selected' : '' }}>Semua Tahun (Total Rekap)</option>
+                @foreach($availableYears as $yr)
+                    <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
+                        Tahun {{ $yr }} {{ $yr == date('Y') ? '(Tahun Aktif)' : '(Data Lampau)' }}
+                    </option>
+                @endforeach
+            </select>
+            @if(($selectedYear ?? 'all') !== 'all')
+                <a href="{{ route('staff.dashboard') }}" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition" title="Tampilkan Semua Tahun">
+                    ✕ Reset
+                </a>
+            @endif
+        </form>
+    </div>
+
     <!-- Top Statistics Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         

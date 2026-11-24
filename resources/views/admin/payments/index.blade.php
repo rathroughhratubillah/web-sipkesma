@@ -78,6 +78,17 @@
             <input type="text" name="search" value="{{ $search }}" placeholder="Ketik Nama, NIM, No. Antrean (A-001), atau Rekening..."
                    class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
         </div>
+        <div class="min-w-[150px]">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tahun Angkatan</label>
+            <select name="year" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <option value="all">Semua Tahun</option>
+                @foreach($availableYears as $yr)
+                    <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
+                        Tahun {{ $yr }} {{ $yr == date('Y') ? '(Aktif)' : '' }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
         <div class="min-w-[170px]">
             <label class="block text-xs font-semibold text-slate-600 mb-1">Metode Transfer</label>
             <select name="method" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
@@ -151,7 +162,7 @@
                             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-teal-50 border border-teal-200 text-teal-900 font-mono font-black text-sm shadow-xs">
                                 {{ $queueCode }}
                             </div>
-                            <span class="block text-[10px] text-emerald-600 font-bold mt-1">&#10003; Tiket Aktif Otomatis</span>
+                            <span class="block text-[10px] text-emerald-600 font-bold mt-1">&#10003; Tiket Aktif (Th. {{ $payment->registration?->academic_year ?? date('Y') }})</span>
                         </td>
 
                         <!-- Bukti Transfer (Thumbnail & View) -->

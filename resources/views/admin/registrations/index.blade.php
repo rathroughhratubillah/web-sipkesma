@@ -14,6 +14,17 @@
             <input type="text" name="search" value="{{ $search }}" placeholder="Nama, NISN, atau no antrean..."
                    class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
         </div>
+        <div class="min-w-[150px]">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tahun Angkatan</label>
+            <select name="year" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
+                <option value="all">Semua Tahun</option>
+                @foreach($availableYears as $yr)
+                    <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
+                        Tahun {{ $yr }} {{ $yr == date('Y') ? '(Aktif)' : '' }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
         <div class="min-w-[180px]">
             <label class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
             <select name="status" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
@@ -63,6 +74,9 @@
                         <td class="px-5 py-3">
                             <span class="font-bold font-mono {{ $reg->queue_code ? 'text-teal-700 bg-teal-50 px-2 py-0.5 rounded-lg' : 'text-slate-400' }}">
                                 {{ $reg->queue_code ?? '—' }}
+                            </span>
+                            <span class="block mt-0.5 text-[10px] text-slate-400 font-sans font-semibold">
+                                Th. {{ $reg->academic_year ?? date('Y') }}
                             </span>
                         </td>
                         <td class="px-5 py-3">

@@ -15,6 +15,7 @@ class Registration extends Model
     protected $fillable = [
         'user_id',
         'test_session_id',
+        'academic_year',
         'status',
         'queue_code',
         'checked_in_at',
@@ -24,9 +25,31 @@ class Registration extends Model
     protected function casts(): array
     {
         return [
+            'academic_year' => 'integer',
             'checked_in_at' => 'datetime',
             'completed_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($registration) {
+            if (!$registration->academic_year) {
+                $registration->academic_year = (int) date('Y');
+            }
+        });
+    }
+
+    /**
+     * Get list of unique academic years present in the database, newest first.
+     */
+    public static function getAvailableYears(): array
+    {
+        $years = static::distinct()->pluck('academic_year')->filter()->toArray();
+        $sessionYears = TestSession::distinct()->pluck('academic_year')->filter()->toArray();
+        $allYears = array_unique(array_merge($years, $sessionYears, [2026]));
+        rsort($allYears);
+        return array_values($allYears);
     }
 
     public function user(): BelongsTo

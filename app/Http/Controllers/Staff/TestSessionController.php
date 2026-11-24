@@ -3,21 +3,31 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\Registration;
 use App\Models\TestSession;
 use Illuminate\Http\Request;
 
 class TestSessionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sessions = TestSession::withCount(['registrations' => function ($query) {
-            $query->whereIn('status', ['awaiting_payment', 'awaiting_verification', 'cleared', 'checked_in', 'in_progress', 'completed']);
-        }])
-        ->orderBy('session_date')
-        ->orderBy('start_time')
-        ->get();
+        $selectedYear = $request->get('year', 'all');
+        $availableYears = Registration::getAvailableYears();
 
-        return view('staff.sessions.index', compact('sessions'));
+        $query = TestSession::withCount(['registrations' => function ($query) {
+            $query->whereIn('status', ['awaiting_payment', 'awaiting_verification', 'cleared', 'checked_in', 'in_progress', 'completed']);
+        }]);
+
+        if ($selectedYear && $selectedYear !== 'all') {
+            $query->where('academic_year', $selectedYear);
+        }
+
+        $sessions = $query
+            ->orderBy('session_date', 'desc')
+            ->orderBy('start_time')
+            ->get();
+
+        return view('staff.sessions.index', compact('sessions', 'selectedYear', 'availableYears'));
     }
 
     public function store(Request $request)

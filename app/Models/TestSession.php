@@ -13,6 +13,7 @@ class TestSession extends Model
     protected $fillable = [
         'session_date',
         'session_name',
+        'academic_year',
         'start_time',
         'end_time',
         'quota',
@@ -23,9 +24,21 @@ class TestSession extends Model
     {
         return [
             'session_date' => 'date',
+            'academic_year' => 'integer',
             'is_active' => 'boolean',
             'quota' => 'integer',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($session) {
+            if (!$session->academic_year) {
+                $session->academic_year = $session->session_date 
+                    ? (int) date('Y', strtotime($session->session_date)) 
+                    : (int) date('Y');
+            }
+        });
     }
 
     public function registrations(): HasMany

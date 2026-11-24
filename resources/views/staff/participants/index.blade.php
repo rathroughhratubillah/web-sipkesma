@@ -31,7 +31,7 @@
 
             <!-- Global Actions -->
             <div class="flex items-center gap-2 self-start md:self-center">
-                <a href="{{ route('staff.participants.export') }}"
+                <a href="{{ route('staff.participants.export', ['year' => $selectedYear]) }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition">
                     <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                     <span>Ekspor Semua (CSV Excel)</span>
@@ -39,10 +39,10 @@
             </div>
         </div>
 
-        <!-- Quick Search Bar -->
+        <!-- Quick Search Bar & Year Filter -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-            <form method="GET" action="{{ route('staff.participants.index') }}" class="flex items-center gap-2">
-                <div class="relative flex-1">
+            <form method="GET" action="{{ route('staff.participants.index') }}" class="flex flex-col sm:flex-row items-center gap-2">
+                <div class="relative flex-1 w-full">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
                     </span>
@@ -50,7 +50,17 @@
                            placeholder="Cari langsung mahasiswa berdasarkan NISN, Nama, No. HP, No. Antrean di semua fakultas..."
                            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-teal-500 text-xs font-medium bg-slate-50/50 outline-hidden">
                 </div>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition shadow-xs">
+                <div class="w-full sm:w-auto shrink-0">
+                    <select name="year" class="w-full sm:w-auto px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 bg-slate-50/50 focus:border-teal-500 outline-none">
+                        <option value="all">Semua Tahun</option>
+                        @foreach($availableYears as $yr)
+                            <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
+                                Tahun {{ $yr }} {{ $yr == date('Y') ? '(Aktif)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition shadow-xs">
                     Cari Global
                 </button>
             </form>
@@ -131,7 +141,7 @@
                         ];
                         $majorsCount = count($facultyMajorMap[$fac] ?? []);
                     @endphp
-                    <a href="{{ route('staff.participants.index', ['faculty' => $fac]) }}"
+                    <a href="{{ route('staff.participants.index', ['faculty' => $fac, 'year' => $selectedYear]) }}"
                        class="group bg-white p-6 rounded-3xl border {{ $meta['border'] }} shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-3">
@@ -175,7 +185,7 @@
         <!-- Header & Navigasi Kembali Halaman 2 -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <a href="{{ route('staff.participants.index') }}"
+                <a href="{{ route('staff.participants.index', ['year' => $selectedYear]) }}"
                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition self-start">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
                     <span>&larr; Kembali ke Daftar Fakultas</span>
@@ -183,7 +193,7 @@
 
                 <!-- Breadcrumbs -->
                 <nav class="flex items-center gap-2 text-xs font-semibold text-slate-400 flex-wrap">
-                    <a href="{{ route('staff.participants.index') }}" class="hover:text-teal-600 transition">Rekap Peserta (Fakultas)</a>
+                    <a href="{{ route('staff.participants.index', ['year' => $selectedYear]) }}" class="hover:text-teal-600 transition">Rekap Peserta (Fakultas)</a>
                     <span>/</span>
                     <span class="text-teal-800 font-bold">{{ $selectedFaculty }}</span>
                 </nav>
@@ -202,7 +212,7 @@
                     </p>
                 </div>
 
-                <a href="{{ route('staff.participants.export', ['faculty' => $selectedFaculty]) }}"
+                <a href="{{ route('staff.participants.export', ['faculty' => $selectedFaculty, 'year' => $selectedYear]) }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition self-start md:self-auto">
                     <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                     <span>Ekspor Fakultas Ini (CSV)</span>
@@ -224,7 +234,7 @@
                     @php
                         $mCount = $majorStats[$maj] ?? 0;
                     @endphp
-                    <a href="{{ route('staff.participants.index', ['faculty' => $selectedFaculty, 'major' => $maj]) }}"
+                    <a href="{{ route('staff.participants.index', ['faculty' => $selectedFaculty, 'major' => $maj, 'year' => $selectedYear]) }}"
                        class="group bg-white p-5 rounded-3xl border transition-all duration-200 flex flex-col justify-between
                               {{ $mCount > 0 
                                  ? 'border-teal-200 hover:border-teal-500 hover:shadow-md hover:-translate-y-0.5' 

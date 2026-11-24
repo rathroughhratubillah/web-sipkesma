@@ -41,6 +41,22 @@
         </button>
     </div>
 
+    <!-- Year Filter -->
+    <form method="GET" action="{{ route('staff.sessions.index') }}" class="bg-white rounded-2xl border border-slate-200 p-3 flex items-center gap-3 text-xs">
+        <span class="font-semibold text-slate-600">Filter Tahun:</span>
+        <select name="year" onchange="this.form.submit()" class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+            <option value="all" {{ ($selectedYear ?? 'all') === 'all' ? 'selected' : '' }}>Semua Tahun</option>
+            @foreach($availableYears as $yr)
+                <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
+                    Tahun {{ $yr }}{{ $yr == date('Y') ? ' (Aktif)' : '' }}
+                </option>
+            @endforeach
+        </select>
+        @if(($selectedYear ?? 'all') !== 'all')
+            <a href="{{ route('staff.sessions.index') }}" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition">✕ Reset</a>
+        @endif
+    </form>
+
     <!-- Sessions Table -->
     <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
         <div class="overflow-x-auto">

@@ -24,27 +24,44 @@ class AdminController extends Controller
     // ============================================================
     // DASHBOARD
     // ============================================================
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+        $availableYears = Registration::getAvailableYears();
+        $selectedYear = $request->get('year', 'all');
+
+        $regQuery = Registration::query();
+        $userQuery = User::role('student');
+        $profileQuery = Profile::query();
+        $healthQuery = HealthHistory::query();
+        $paymentQuery = Payment::query();
+
+        if ($selectedYear && $selectedYear !== 'all') {
+            $regQuery->where('academic_year', $selectedYear);
+            $userQuery->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+            $profileQuery->whereHas('user.registration', fn($q) => $q->where('academic_year', $selectedYear));
+            $healthQuery->whereHas('user.registration', fn($q) => $q->where('academic_year', $selectedYear));
+            $paymentQuery->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
+
         $stats = [
-            'total_users'         => User::count(),
-            'total_profiles'      => Profile::count(),
-            'total_health'        => HealthHistory::count(),
-            'total_registrations' => Registration::count(),
-            'total_payments'      => Payment::count(),
-            'pending_payments'    => Payment::where('status', 'pending')->count(),
-            'completed'           => Registration::where('status', 'completed')->count(),
+            'total_users'         => (clone $userQuery)->count(),
+            'total_profiles'      => (clone $profileQuery)->count(),
+            'total_health'        => (clone $healthQuery)->count(),
+            'total_registrations' => (clone $regQuery)->count(),
+            'total_payments'      => (clone $paymentQuery)->count(),
+            'pending_payments'    => (clone $paymentQuery)->where('status', 'pending')->count(),
+            'completed'           => (clone $regQuery)->where('status', 'completed')->count(),
         ];
 
         // Status Breakdown Alur Skrining
         $statusCounts = [
-            'draft'                 => Registration::where('status', 'draft')->count(),
-            'awaiting_payment'      => Registration::where('status', 'awaiting_payment')->count(),
-            'awaiting_verification' => Registration::where('status', 'awaiting_verification')->count(),
-            'cleared'               => Registration::where('status', 'cleared')->count(),
-            'checked_in'            => Registration::where('status', 'checked_in')->count(),
-            'in_progress'           => Registration::where('status', 'in_progress')->count(),
-            'completed'             => Registration::where('status', 'completed')->count(),
+            'draft'                 => (clone $regQuery)->where('status', 'draft')->count(),
+            'awaiting_payment'      => (clone $regQuery)->where('status', 'awaiting_payment')->count(),
+            'awaiting_verification' => (clone $regQuery)->where('status', 'awaiting_verification')->count(),
+            'cleared'               => (clone $regQuery)->where('status', 'cleared')->count(),
+            'checked_in'            => (clone $regQuery)->where('status', 'checked_in')->count(),
+            'in_progress'           => (clone $regQuery)->where('status', 'in_progress')->count(),
+            'completed'             => (clone $regQuery)->where('status', 'completed')->count(),
         ];
 
         // Trend Progres 7 Hari Terakhir (Naik-Turun Grafik Aktivitas)
@@ -63,13 +80,13 @@ class AdminController extends Controller
             };
             $chartDates[] = "{$dayNum} {$monthShort}";
 
-            $regCount = Registration::whereDate('created_at', $dateStr)->count();
-            $payCount = Payment::where('status', 'verified')->whereDate('updated_at', $dateStr)->count();
-            $compCount = Registration::where('status', 'completed')->whereDate('updated_at', $dateStr)->count();
+            $regC = (clone $regQuery)->whereDate('created_at', $dateStr)->count();
+            $payC = (clone $paymentQuery)->where('status', 'verified')->whereDate('updated_at', $dateStr)->count();
+            $compC = (clone $regQuery)->where('status', 'completed')->whereDate('updated_at', $dateStr)->count();
 
-            $chartRegistrations[] = $regCount;
-            $chartPayments[]      = $payCount;
-            $chartCompleted[]     = $compCount;
+            $chartRegistrations[] = $regC;
+            $chartPayments[]      = $payC;
+            $chartCompleted[]     = $compC;
         }
 
         // Jika data pendaftaran pada database seeder terkonsentrasi di 1 hari saja,
@@ -111,16 +128,23 @@ class AdminController extends Controller
             ];
         }
 
-        // Data Fakultas untuk navigasi langsung ke Halaman Rekap
+        // Data Fakultas untuk navigasi langsung ke Halaman Rekap (disaring sesuai tahun)
         $faculties = ParticipantController::getFacultyMajorMap();
-        $facultyCounts = Profile::select('faculty', DB::raw('count(*) as total'))
+        $facultyCountQuery = Profile::select('faculty', DB::raw('count(*) as total'))
             ->whereNotNull('faculty')
-            ->where('faculty', '!=', '')
-            ->groupBy('faculty')
+            ->where('faculty', '!=', '');
+        if ($selectedYear && $selectedYear !== 'all') {
+            $facultyCountQuery->whereHas('user.registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
+        $facultyCounts = $facultyCountQuery->groupBy('faculty')
             ->pluck('total', 'faculty')
             ->toArray();
 
-        $recentUsers = User::with(['profile', 'registration', 'roles'])->latest()->take(8)->get();
+        $recentUsersQuery = User::role('student')->with(['profile', 'registration', 'roles']);
+        if ($selectedYear && $selectedYear !== 'all') {
+            $recentUsersQuery->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
+        $recentUsers = $recentUsersQuery->latest()->take(8)->get();
 
         return view('admin.dashboard', compact(
             'stats',
@@ -131,7 +155,9 @@ class AdminController extends Controller
             'chartCompleted',
             'faculties',
             'facultyCounts',
-            'recentUsers'
+            'recentUsers',
+            'availableYears',
+            'selectedYear'
         ));
     }
 
@@ -239,8 +265,10 @@ class AdminController extends Controller
     {
         $search  = $request->get('search');
         $faculty = $request->get('faculty');
+        $selectedYear = $request->get('year', 'all');
+        $availableYears = Registration::getAvailableYears();
 
-        $query = Profile::with('user');
+        $query = Profile::with(['user.registration']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -254,6 +282,10 @@ class AdminController extends Controller
             $query->where('faculty', $faculty);
         }
 
+        if ($selectedYear && $selectedYear !== 'all') {
+            $query->whereHas('user.registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
+
         $profiles = $query->latest()->paginate(20)->withQueryString();
 
         $faculties = [
@@ -264,7 +296,7 @@ class AdminController extends Controller
             'Fakultas Ushuluddin Dan Arab',
         ];
 
-        return view('admin.profiles.index', compact('profiles', 'search', 'faculty', 'faculties'));
+        return view('admin.profiles.index', compact('profiles', 'search', 'faculty', 'faculties', 'selectedYear', 'availableYears'));
     }
 
     public function editProfile(Profile $profile)
@@ -330,13 +362,18 @@ class AdminController extends Controller
         $selectedFaculty = $request->get('faculty');
         $selectedMajor = $request->get('major');
         $healthStatus = $request->get('health_status'); // 'completed', 'empty', 'all'
+        $selectedYear = $request->get('year', 'all');
+        $availableYears = Registration::getAvailableYears();
 
         $faculties = $this->getFacultyMajorMap();
 
-        // Ambil semua data mahasiswa untuk statistik
-        $allStudents = User::role('student')
-            ->with(['profile', 'healthHistory', 'registration'])
-            ->get();
+        // Ambil data mahasiswa untuk statistik (difilter tahun bila dipilih)
+        $studentsQuery = User::role('student')
+            ->with(['profile', 'healthHistory', 'registration']);
+        if ($selectedYear && $selectedYear !== 'all') {
+            $studentsQuery->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
+        $allStudents = $studentsQuery->get();
 
         $totalStudents = $allStudents->count();
         $totalWithHealth = $allStudents->filter(fn($u) => $u->healthHistory !== null)->count();
@@ -397,6 +434,10 @@ class AdminController extends Controller
         if ($viewMode === 'table') {
             $query = User::role('student')->with(['profile', 'healthHistory', 'registration']);
 
+            if ($selectedYear && $selectedYear !== 'all') {
+                $query->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+            }
+
             if ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
@@ -443,7 +484,9 @@ class AdminController extends Controller
             'search',
             'selectedFaculty',
             'selectedMajor',
-            'healthStatus'
+            'healthStatus',
+            'selectedYear',
+            'availableYears'
         ));
     }
 
@@ -452,17 +495,25 @@ class AdminController extends Controller
         $faculty = $request->get('faculty');
         $major   = $request->get('major');
         $status  = $request->get('health_status');
+        $selectedYear = $request->get('year', 'all');
 
         $suffix = '';
+        if ($selectedYear && $selectedYear !== 'all') {
+            $suffix .= '_' . $selectedYear;
+        }
         if ($major && $major !== 'all') {
-            $suffix = '_' . Str::slug($major);
+            $suffix .= '_' . Str::slug($major);
         } elseif ($faculty && $faculty !== 'all') {
-            $suffix = '_' . Str::slug($faculty);
+            $suffix .= '_' . Str::slug($faculty);
         }
 
         $fileName = 'Riwayat_Kesehatan_Mahasiswa' . $suffix . '_' . date('Y-m-d_His') . '.csv';
 
         $query = User::role('student')->with(['profile', 'healthHistory', 'registration']);
+
+        if ($selectedYear && $selectedYear !== 'all') {
+            $query->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
 
         if ($faculty && $faculty !== 'all') {
             $query->whereHas('profile', fn($q) => $q->where('faculty', $faculty));
@@ -690,8 +741,14 @@ class AdminController extends Controller
     {
         $search = $request->get('search');
         $status = $request->get('status');
+        $selectedYear = $request->get('year', 'all');
+        $availableYears = Registration::getAvailableYears();
 
         $query = Registration::with(['user.profile', 'testSession', 'payment']);
+
+        if ($selectedYear && $selectedYear !== 'all') {
+            $query->where('academic_year', $selectedYear);
+        }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -708,7 +765,7 @@ class AdminController extends Controller
         $registrations = $query->latest()->paginate(20)->withQueryString();
         $sessions      = TestSession::orderBy('session_date')->get();
 
-        return view('admin.registrations.index', compact('registrations', 'search', 'status', 'sessions'));
+        return view('admin.registrations.index', compact('registrations', 'search', 'status', 'sessions', 'selectedYear', 'availableYears'));
     }
 
     public function editRegistration(Registration $registration)
@@ -724,6 +781,7 @@ class AdminController extends Controller
     public function updateRegistration(Request $request, Registration $registration)
     {
         $validated = $request->validate([
+            'academic_year'   => ['nullable', 'integer'],
             'status'          => ['required', 'in:draft,awaiting_payment,awaiting_verification,cleared,checked_in,in_progress,completed'],
             'test_session_id' => ['nullable', 'exists:test_sessions,id'],
             'queue_code'      => ['nullable', 'string', 'max:50'],
@@ -749,8 +807,14 @@ class AdminController extends Controller
         $search = $request->get('search');
         $status = $request->get('status');
         $method = $request->get('method');
+        $selectedYear = $request->get('year', 'all');
+        $availableYears = Registration::getAvailableYears();
 
         $query = Payment::with(['registration.user.profile', 'registration.testSession', 'verifier']);
+
+        if ($selectedYear && $selectedYear !== 'all') {
+            $query->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
 
         if ($search) {
             $query->where(function ($sq) use ($search) {
@@ -771,14 +835,19 @@ class AdminController extends Controller
 
         $payments = $query->latest()->paginate(20)->withQueryString();
 
+        $baseStatQuery = Payment::query();
+        if ($selectedYear && $selectedYear !== 'all') {
+            $baseStatQuery->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
+
         $stats = [
-            'total' => Payment::count(),
-            'seabank' => Payment::where('bank_name', 'like', '%seabank%')->count(),
-            'dana' => Payment::where('bank_name', 'like', '%dana%')->count(),
-            'total_amount' => Payment::sum('amount') ?: (Payment::count() * 150000),
+            'total' => (clone $baseStatQuery)->count(),
+            'seabank' => (clone $baseStatQuery)->where('bank_name', 'like', '%seabank%')->count(),
+            'dana' => (clone $baseStatQuery)->where('bank_name', 'like', '%dana%')->count(),
+            'total_amount' => (clone $baseStatQuery)->sum('amount') ?: ((clone $baseStatQuery)->count() * 150000),
         ];
 
-        return view('admin.payments.index', compact('payments', 'search', 'status', 'method', 'stats'));
+        return view('admin.payments.index', compact('payments', 'search', 'status', 'method', 'stats', 'selectedYear', 'availableYears'));
     }
 
     public function updatePaymentStatus(Request $request, Payment $payment)

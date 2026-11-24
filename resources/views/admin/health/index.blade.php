@@ -43,7 +43,7 @@
 
             <!-- Global Actions -->
             <div class="flex items-center gap-2 self-start md:self-center">
-                <a href="{{ route('admin.health.export') }}"
+                <a href="{{ route('admin.health.export', ['year' => $selectedYear]) }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition">
                     <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                     <span>Ekspor Semua Data (CSV)</span>
@@ -51,10 +51,10 @@
             </div>
         </div>
 
-        <!-- Quick Global Search -->
+        <!-- Quick Global Search & Year Filter -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-            <form method="GET" action="{{ route('admin.health.index') }}" class="flex items-center gap-2">
-                <div class="relative flex-1">
+            <form method="GET" action="{{ route('admin.health.index') }}" class="flex flex-col sm:flex-row items-center gap-2">
+                <div class="relative flex-1 w-full">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
                     </span>
@@ -62,7 +62,17 @@
                            placeholder="Cari langsung mahasiswa berdasarkan NIM, Nama, No. HP, atau Email di semua fakultas..."
                            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-teal-500 text-xs font-medium bg-slate-50/50 outline-hidden">
                 </div>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition shadow-xs">
+                <div class="w-full sm:w-auto shrink-0">
+                    <select name="year" class="w-full sm:w-auto px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 bg-slate-50/50 focus:border-teal-500 outline-none">
+                        <option value="all">Semua Tahun</option>
+                        @foreach($availableYears as $yr)
+                            <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
+                                Tahun {{ $yr }} {{ $yr == date('Y') ? '(Aktif)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition shadow-xs">
                     Cari Global
                 </button>
             </form>
@@ -140,7 +150,7 @@
                         ];
                         $percent = $stat['total'] > 0 ? round(($stat['with_health'] / $stat['total']) * 100) : 0;
                     @endphp
-                    <a href="{{ route('admin.health.index', ['faculty' => $fac]) }}"
+                    <a href="{{ route('admin.health.index', ['faculty' => $fac, 'year' => $selectedYear]) }}"
                        class="group bg-white p-6 rounded-3xl border {{ $meta['border'] }} shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-3">
@@ -194,7 +204,7 @@
         <!-- Header & Navigasi Kembali Halaman 2 -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <a href="{{ route('admin.health.index') }}"
+                <a href="{{ route('admin.health.index', ['year' => $selectedYear]) }}"
                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition self-start">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
                     <span>&larr; Kembali ke Daftar Fakultas</span>
@@ -202,7 +212,7 @@
 
                 <!-- Breadcrumbs -->
                 <nav class="flex items-center gap-2 text-xs font-semibold text-slate-400 flex-wrap">
-                    <a href="{{ route('admin.health.index') }}" class="hover:text-teal-600 transition">Riwayat Kesehatan</a>
+                    <a href="{{ route('admin.health.index', ['year' => $selectedYear]) }}" class="hover:text-teal-600 transition">Riwayat Kesehatan</a>
                     <span>/</span>
                     <span class="text-teal-800 font-bold">{{ $selectedFaculty }}</span>
                 </nav>
@@ -221,7 +231,7 @@
                     </p>
                 </div>
 
-                <a href="{{ route('admin.health.export', ['faculty' => $selectedFaculty]) }}"
+                <a href="{{ route('admin.health.export', ['faculty' => $selectedFaculty, 'year' => $selectedYear]) }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm transition self-start md:self-auto">
                     <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                     <span>Ekspor Fakultas Ini (CSV)</span>
@@ -248,7 +258,7 @@
                         $mStat = $currentFacultyData['majors'][$maj] ?? ['total' => 0, 'with_health' => 0, 'without_health' => 0];
                         $hasStudents = $mStat['total'] > 0;
                     @endphp
-                    <a href="{{ route('admin.health.index', ['faculty' => $selectedFaculty, 'major' => $maj]) }}"
+                    <a href="{{ route('admin.health.index', ['faculty' => $selectedFaculty, 'major' => $maj, 'year' => $selectedYear]) }}"
                        class="group bg-white p-5 rounded-3xl border transition-all duration-200 flex flex-col justify-between
                               {{ $hasStudents 
                                  ? 'border-teal-200 hover:border-teal-500 hover:shadow-md hover:-translate-y-0.5' 
@@ -298,13 +308,13 @@
         <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 @if($selectedFaculty)
-                    <a href="{{ route('admin.health.index', ['faculty' => $selectedFaculty]) }}"
+                    <a href="{{ route('admin.health.index', ['faculty' => $selectedFaculty, 'year' => $selectedYear]) }}"
                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition self-start">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
                         <span>&larr; Kembali ke Daftar Jurusan ({{ $selectedFaculty }})</span>
                     </a>
                 @else
-                    <a href="{{ route('admin.health.index') }}"
+                    <a href="{{ route('admin.health.index', ['year' => $selectedYear]) }}"
                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition self-start">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
                         <span>&larr; Kembali ke Daftar Fakultas</span>
@@ -313,10 +323,10 @@
 
                 <!-- Breadcrumbs -->
                 <nav class="flex items-center gap-2 text-xs font-semibold text-slate-400 flex-wrap">
-                    <a href="{{ route('admin.health.index') }}" class="hover:text-teal-600 transition">Riwayat Kesehatan</a>
+                    <a href="{{ route('admin.health.index', ['year' => $selectedYear]) }}" class="hover:text-teal-600 transition">Riwayat Kesehatan</a>
                     @if($selectedFaculty)
                         <span>/</span>
-                        <a href="{{ route('admin.health.index', ['faculty' => $selectedFaculty]) }}" class="hover:text-teal-600 transition">{{ $selectedFaculty }}</a>
+                        <a href="{{ route('admin.health.index', ['faculty' => $selectedFaculty, 'year' => $selectedYear]) }}" class="hover:text-teal-600 transition">{{ $selectedFaculty }}</a>
                     @endif
                     @if($selectedMajor)
                         <span>/</span>
@@ -352,7 +362,7 @@
 
                 <!-- Export Button -->
                 <div class="flex items-center gap-2 self-start md:self-auto">
-                    <a href="{{ route('admin.health.export', ['faculty' => $selectedFaculty, 'major' => $selectedMajor, 'health_status' => $healthStatus]) }}"
+                    <a href="{{ route('admin.health.export', ['faculty' => $selectedFaculty, 'major' => $selectedMajor, 'health_status' => $healthStatus, 'year' => $selectedYear]) }}"
                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                         <span>Ekspor CSV (Data Ini)</span>
@@ -372,7 +382,7 @@
                 @endif
 
                 <!-- Search Input -->
-                <div class="sm:col-span-6 lg:col-span-6">
+                <div class="sm:col-span-5 lg:col-span-5">
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
@@ -384,11 +394,23 @@
                 </div>
 
                 <!-- Health History Status Filter -->
-                <div class="sm:col-span-4 lg:col-span-4">
+                <div class="sm:col-span-3 lg:col-span-3">
                     <select name="health_status" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-teal-500 text-xs font-semibold bg-white outline-hidden">
-                        <option value="all">-- Semua Status Riwayat Kesehatan --</option>
+                        <option value="all">-- Semua Status Riwayat --</option>
                         <option value="completed" {{ $healthStatus === 'completed' ? 'selected' : '' }}>Sudah Lengkap / Mengisi</option>
                         <option value="empty" {{ $healthStatus === 'empty' ? 'selected' : '' }}>Belum Mengisi Riwayat</option>
+                    </select>
+                </div>
+
+                <!-- Academic Year Filter -->
+                <div class="sm:col-span-2 lg:col-span-2">
+                    <select name="year" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-teal-500 text-xs font-semibold bg-white outline-hidden">
+                        <option value="all">Semua Tahun</option>
+                        @foreach($availableYears as $yr)
+                            <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
+                                Th. {{ $yr }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -397,12 +419,13 @@
                     <button type="submit" class="flex-1 py-2 px-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-xs transition">
                         Filter
                     </button>
-                    @if($search || ($healthStatus && $healthStatus !== 'all'))
+                    @if($search || ($healthStatus && $healthStatus !== 'all') || ($selectedYear && $selectedYear !== 'all'))
                         <a href="{{ route('admin.health.index', ['faculty' => $selectedFaculty, 'major' => $selectedMajor]) }}"
                            class="py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition" title="Reset filter">
                             Reset
                         </a>
                     @endif
+                </div>
                 </div>
             </form>
         </div>

@@ -73,6 +73,8 @@ class ParticipantController extends Controller
         $selectedMajor   = $request->get('major');
         $search          = $request->get('search');
         $status          = $request->get('status');
+        $selectedYear    = $request->get('year', 'all');
+        $availableYears  = Registration::getAvailableYears();
 
         // Validasi fakultas jika diberikan
         if ($selectedFaculty && !array_key_exists($selectedFaculty, $facultyMajorMap)) {
@@ -95,9 +97,15 @@ class ParticipantController extends Controller
         }
 
         // Data untuk Halaman 1 (Level Fakultas)
-        $facultyCountsRaw = Profile::select('faculty', DB::raw('count(*) as total'))
+        $facultyCountsQuery = Profile::select('faculty', DB::raw('count(*) as total'))
             ->whereNotNull('faculty')
-            ->where('faculty', '!=', '')
+            ->where('faculty', '!=', '');
+
+        if ($selectedYear && $selectedYear !== 'all') {
+            $facultyCountsQuery->whereHas('user.registration', fn($rq) => $rq->where('academic_year', $selectedYear));
+        }
+
+        $facultyCountsRaw = $facultyCountsQuery
             ->groupBy('faculty')
             ->pluck('total', 'faculty')
             ->toArray();
@@ -115,10 +123,16 @@ class ParticipantController extends Controller
         $majorStats = [];
         if ($selectedFaculty) {
             $currentMajors = $facultyMajorMap[$selectedFaculty] ?? [];
-            $majorCountsRaw = Profile::select('major', DB::raw('count(*) as total'))
+            $majorCountsQuery = Profile::select('major', DB::raw('count(*) as total'))
                 ->where('faculty', $selectedFaculty)
                 ->whereNotNull('major')
-                ->where('major', '!=', '')
+                ->where('major', '!=', '');
+
+            if ($selectedYear && $selectedYear !== 'all') {
+                $majorCountsQuery->whereHas('user.registration', fn($rq) => $rq->where('academic_year', $selectedYear));
+            }
+
+            $majorCountsRaw = $majorCountsQuery
                 ->groupBy('major')
                 ->pluck('total', 'major')
                 ->toArray();
@@ -137,6 +151,10 @@ class ParticipantController extends Controller
                     $pq->where('faculty', $selectedFaculty)
                        ->where('major', $selectedMajor);
                 });
+
+            if ($selectedYear && $selectedYear !== 'all') {
+                $query->where('academic_year', $selectedYear);
+            }
 
             if ($search) {
                 $query->where(function ($q) use ($search) {
@@ -159,19 +177,24 @@ class ParticipantController extends Controller
 
             $participants = $query->latest()->paginate(25)->withQueryString();
         } elseif ($viewLevel === 'search') {
-            $query = Registration::with(['user.profile', 'user.healthHistory', 'testSession', 'payment', 'stationResults'])
-                ->where(function ($q) use ($search) {
-                    $q->where('queue_code', 'like', "%{$search}%")
-                        ->orWhereHas('user', function ($uq) use ($search) {
-                            $uq->where('name', 'like', "%{$search}%")
-                               ->orWhere('email', 'like', "%{$search}%");
-                        })
-                        ->orWhereHas('user.profile', function ($pq) use ($search) {
-                            $pq->where('full_name', 'like', "%{$search}%")
-                               ->orWhere('nim', 'like', "%{$search}%")
-                               ->orWhere('phone', 'like', "%{$search}%");
-                        });
-                });
+            $query = Registration::with(['user.profile', 'user.healthHistory', 'testSession', 'payment', 'stationResults']);
+
+            if ($selectedYear && $selectedYear !== 'all') {
+                $query->where('academic_year', $selectedYear);
+            }
+
+            $query->where(function ($q) use ($search) {
+                $q->where('queue_code', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($uq) use ($search) {
+                        $uq->where('name', 'like', "%{$search}%")
+                           ->orWhere('email', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('user.profile', function ($pq) use ($search) {
+                        $pq->where('full_name', 'like', "%{$search}%")
+                           ->orWhere('nim', 'like', "%{$search}%")
+                           ->orWhere('phone', 'like', "%{$search}%");
+                    });
+            });
 
             if ($status && $status !== 'all') {
                 $query->where('status', $status);
@@ -192,25 +215,35 @@ class ParticipantController extends Controller
             'participants',
             'search',
             'status',
-            'totalAllParticipants'
+            'totalAllParticipants',
+            'selectedYear',
+            'availableYears'
         ));
     }
 
     public function exportCsv(Request $request): StreamedResponse
     {
-        $faculty = $request->get('faculty');
-        $major   = $request->get('major');
+        $faculty      = $request->get('faculty');
+        $major        = $request->get('major');
+        $selectedYear = $request->get('year', 'all');
 
         $suffix = '';
+        if ($selectedYear && $selectedYear !== 'all') {
+            $suffix .= '_Tahun_' . $selectedYear;
+        }
         if ($major && $major !== 'all') {
-            $suffix = '_' . Str::slug($major);
+            $suffix .= '_' . Str::slug($major);
         } elseif ($faculty && $faculty !== 'all') {
-            $suffix = '_' . Str::slug($faculty);
+            $suffix .= '_' . Str::slug($faculty);
         }
 
         $fileName = 'Rekap_Peserta_Sipkesma' . $suffix . '_' . date('Y-m-d_His') . '.csv';
 
         $query = Registration::with(['user.profile', 'user.healthHistory', 'testSession', 'payment', 'stationResults']);
+
+        if ($selectedYear && $selectedYear !== 'all') {
+            $query->where('academic_year', $selectedYear);
+        }
 
         if ($faculty && $faculty !== 'all') {
             $query->whereHas('user.profile', fn($q) => $q->where('faculty', $faculty));
@@ -238,6 +271,7 @@ class ParticipantController extends Controller
             // Header row
             fputcsv($file, [
                 'ID Registrasi',
+                'Tahun Akademik',
                 'Nomor Antrean',
                 'NISN',
                 'Nama Lengkap',
@@ -268,6 +302,7 @@ class ParticipantController extends Controller
 
                 fputcsv($file, [
                     $reg->id,
+                    $reg->academic_year ?? '-',
                     $reg->queue_code ?? '-',
                     $profile?->nim ?? '-',
                     $profile?->full_name ?? $reg->user?->name,
