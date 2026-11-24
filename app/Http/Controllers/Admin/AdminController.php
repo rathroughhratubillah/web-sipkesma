@@ -168,6 +168,8 @@ class AdminController extends Controller
     {
         $search = $request->get('search');
         $role   = $request->get('role');
+        $selectedYear = $request->get('year', 'all');
+        $availableYears = Registration::getAvailableYears();
 
         $query = User::with(['profile', 'roles', 'registration']);
 
@@ -182,10 +184,14 @@ class AdminController extends Controller
             $query->whereHas('roles', fn($q) => $q->where('name', $role));
         }
 
+        if ($selectedYear && $selectedYear !== 'all') {
+            $query->whereHas('registration', fn($q) => $q->where('academic_year', $selectedYear));
+        }
+
         $users = $query->latest()->paginate(20)->withQueryString();
         $roles = Role::all();
 
-        return view('admin.users.index', compact('users', 'search', 'role', 'roles'));
+        return view('admin.users.index', compact('users', 'search', 'role', 'roles', 'selectedYear', 'availableYears'));
     }
 
     public function createUser()

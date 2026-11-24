@@ -49,7 +49,7 @@
 
     {{-- 1. STAT CARDS --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <a href="{{ route('admin.users.index') }}" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs hover:shadow-md hover:border-teal-300 transition group flex items-center gap-3">
+        <a href="{{ route('admin.users.index', ['year' => $selectedYear]) }}" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs hover:shadow-md hover:border-teal-300 transition group flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-base shrink-0">👤</div>
             <div>
                 <div class="text-2xl font-black text-slate-900 leading-tight">{{ $stats['total_users'] }}</div>

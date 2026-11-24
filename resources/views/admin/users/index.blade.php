@@ -24,6 +24,17 @@
                 @endforeach
             </select>
         </div>
+        <div class="min-w-[150px]">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tahun Akademik</label>
+            <select name="year" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
+                <option value="all" {{ ($selectedYear ?? 'all') === 'all' ? 'selected' : '' }}>Semua Tahun</option>
+                @foreach($availableYears as $yr)
+                    <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
+                        Tahun {{ $yr }}{{ $yr == date('Y') ? ' (Aktif)' : '' }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
         <button type="submit" class="px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition">
             🔍 Cari
         </button>
@@ -88,6 +99,11 @@
                                 <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold {{ $user->registration ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500' }}">
                                     {{ $user->registration ? '✓ Reg' : '✗ Reg' }}
                                 </span>
+                                @if($user->registration?->academic_year)
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-violet-100 text-violet-800">
+                                        {{ $user->registration->academic_year }}
+                                    </span>
+                                @endif
                             </div>
                         </td>
                         <td class="px-5 py-3 text-slate-500">{{ $user->created_at->format('d/m/Y') }}</td>

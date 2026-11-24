@@ -50,6 +50,12 @@
             </div>
 
             <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Tahun Akademik / Angkatan</label>
+                <input type="number" name="academic_year" value="{{ old('academic_year', $registration->academic_year ?? date('Y')) }}" placeholder="Cth: {{ date('Y') }}"
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
+            </div>
+
+            <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1.5">Nomor Antrean</label>
                 <input type="text" name="queue_code" value="{{ old('queue_code', $registration->queue_code) }}" placeholder="Cth: A-001"
                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
