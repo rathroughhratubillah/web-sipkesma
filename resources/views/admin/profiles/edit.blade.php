@@ -23,6 +23,7 @@
                 faculties: @json(array_keys($faculties)),
                 majors: @json($faculties),
                 selectedFaculty: '{{ old('faculty', $profile->faculty) }}',
+                selectedMajor: '{{ old('major', $profile->major) }}',
                 get filteredMajors() {
                     return this.majors[this.selectedFaculty] || [];
                 }
@@ -54,23 +55,19 @@
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
                         <option value="">-- Pilih Fakultas --</option>
                         @foreach(array_keys($faculties) as $fac)
-                            <option value="{{ $fac }}" {{ old('faculty', $profile->faculty) === $fac ? 'selected' : '' }}>{{ $fac }}</option>
+                            <option value="{{ $fac }}">{{ $fac }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="sm:col-span-2">
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5">Program Studi <span class="text-red-500">*</span></label>
-                    <select name="major" required
+                    <select name="major" x-model="selectedMajor" required
                             class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
                         <option value="">-- Pilih Program Studi --</option>
                         <template x-for="m in filteredMajors" :key="m">
-                            <option :value="m" :selected="m === '{{ old('major', $profile->major) }}'" x-text="m"></option>
+                            <option :value="m" x-text="m" :selected="m === selectedMajor"></option>
                         </template>
-                        {{-- Fallback jika JS tidak jalan --}}
-                        @if($profile->major)
-                            <option value="{{ $profile->major }}" selected>{{ $profile->major }}</option>
-                        @endif
                     </select>
                 </div>
 

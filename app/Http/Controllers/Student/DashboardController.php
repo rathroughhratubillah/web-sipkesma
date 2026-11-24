@@ -76,31 +76,10 @@ class DashboardController extends Controller
             ],
             8 => [
                 'id' => 8,
-                'name' => 'Nomor Urut Tes',
-                'description' => 'Dapatkan QR tiket antrean digital.',
+                'name' => 'Nomor Urut & Tiket Antrean',
+                'description' => 'Dapatkan tiket antrean digital.',
                 'is_completed' => in_array($registration->status, ['cleared', 'checked_in', 'in_progress', 'completed']),
                 'route' => route('student.ticket'),
-            ],
-            9 => [
-                'id' => 9,
-                'name' => 'Check-in Kampus',
-                'description' => 'Pindai QR saat tiba di klinik kampus.',
-                'is_completed' => in_array($registration->status, ['checked_in', 'in_progress', 'completed']),
-                'route' => route('student.status'),
-            ],
-            10 => [
-                'id' => 10,
-                'name' => 'Pemeriksaan 3 Stasiun',
-                'description' => 'Tes urin, NAPZA, dan fisik.',
-                'is_completed' => $registration->isAllStationsPassed(),
-                'route' => route('student.status'),
-            ],
-            11 => [
-                'id' => 11,
-                'name' => 'Unduh Sertifikat',
-                'description' => 'Sertifikat resmi tanda lulus skrining.',
-                'is_completed' => $registration->status === 'completed',
-                'route' => route('student.certificate'),
             ],
         ];
 
@@ -111,8 +90,8 @@ class DashboardController extends Controller
                 $currentStepId = $id;
                 break;
             }
-            if ($id === 11 && $step['is_completed']) {
-                $currentStepId = 11;
+            if ($id === 8 && $step['is_completed']) {
+                $currentStepId = 8;
             }
         }
 

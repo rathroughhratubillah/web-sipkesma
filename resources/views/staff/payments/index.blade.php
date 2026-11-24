@@ -15,23 +15,42 @@
 
     <!-- Top Tabs & Stats -->
     <div class="flex flex-wrap items-center justify-between gap-4">
-        <!-- Tabs -->
-        <div class="flex items-center gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 text-xs font-semibold">
-            <a href="{{ route('staff.payments.index', ['status' => 'pending']) }}" 
+        <!-- Status Tabs -->
+        <div class="flex items-center gap-1.5 bg-white p-1.5 rounded-2xl border border-slate-200 text-xs font-semibold">
+            <a href="{{ route('staff.payments.index', ['status' => 'pending', 'method' => $method]) }}" 
                class="px-4 py-2 rounded-xl transition {{ $status === 'pending' ? 'bg-amber-500 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900' }}">
                 Menunggu ({{ $counts['pending'] }})
             </a>
-            <a href="{{ route('staff.payments.index', ['status' => 'verified']) }}" 
+            <a href="{{ route('staff.payments.index', ['status' => 'verified', 'method' => $method]) }}" 
                class="px-4 py-2 rounded-xl transition {{ $status === 'verified' ? 'bg-teal-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900' }}">
                 Disetujui ({{ $counts['verified'] }})
             </a>
-            <a href="{{ route('staff.payments.index', ['status' => 'rejected']) }}" 
+            <a href="{{ route('staff.payments.index', ['status' => 'rejected', 'method' => $method]) }}" 
                class="px-4 py-2 rounded-xl transition {{ $status === 'rejected' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900' }}">
                 Ditolak ({{ $counts['rejected'] }})
             </a>
-            <a href="{{ route('staff.payments.index', ['status' => 'all']) }}" 
+            <a href="{{ route('staff.payments.index', ['status' => 'all', 'method' => $method]) }}" 
                class="px-4 py-2 rounded-xl transition {{ $status === 'all' ? 'bg-slate-800 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900' }}">
                 Semua Riwayat
+            </a>
+        </div>
+
+        <!-- Method Filter Buttons (SeaBank / DANA) -->
+        <div class="flex items-center gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 text-xs font-bold">
+            <span class="text-slate-400 text-[11px] px-2 font-medium">Metode:</span>
+            <a href="{{ route('staff.payments.index', ['status' => $status, 'method' => 'all']) }}" 
+               class="px-3 py-1.5 rounded-xl transition {{ $method === 'all' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100' }}">
+                Semua
+            </a>
+            <a href="{{ route('staff.payments.index', ['status' => $status, 'method' => 'SeaBank']) }}" 
+               class="px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 {{ $method === 'SeaBank' ? 'bg-amber-500 text-white' : 'text-amber-800 bg-amber-50 hover:bg-amber-100' }}">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                <span>SeaBank ({{ $counts['seabank'] }})</span>
+            </a>
+            <a href="{{ route('staff.payments.index', ['status' => $status, 'method' => 'DANA']) }}" 
+               class="px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 {{ $method === 'DANA' ? 'bg-sky-600 text-white' : 'text-sky-800 bg-sky-50 hover:bg-sky-100' }}">
+                <span class="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
+                <span>DANA ({{ $counts['dana'] }})</span>
             </a>
         </div>
     </div>
@@ -78,8 +97,24 @@
 
                             <!-- Bank -->
                             <td class="p-4">
-                                <div class="font-bold text-slate-800">{{ $p->bank_name ?: 'Bank Transfer' }}</div>
-                                <div class="text-slate-500 text-[11px]">a.n. {{ $p->sender_name ?: '-' }}</div>
+                                <div class="flex items-center gap-1.5 mb-1">
+                                    @if(str_contains(strtolower($p->bank_name), 'seabank'))
+                                        <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 font-extrabold text-[10px] inline-flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                            SeaBank
+                                        </span>
+                                    @elseif(str_contains(strtolower($p->bank_name), 'dana'))
+                                        <span class="px-2.5 py-0.5 rounded-lg bg-sky-100 text-sky-900 border border-sky-300 font-extrabold text-[10px] inline-flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                                            DANA
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold text-[10px]">
+                                            {{ $p->bank_name ?: 'Bank Transfer' }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="text-slate-600 text-[11px] font-medium">a.n. {{ $p->sender_name ?: '-' }}</div>
                             </td>
 
                             <!-- Nominal -->
@@ -137,7 +172,9 @@
                                         </button>
                                     </div>
                                 @else
-                                    <span class="text-slate-400 text-[11px]">{{ $p->verified_at?->format('d/m/Y H:i') }}</span>
+                                    <div class="flex items-center justify-end gap-2">
+                                        <span class="text-slate-400 text-[11px]">{{ $p->verified_at?->format('d/m/Y H:i') }}</span>
+                                    </div>
                                 @endif
                             </td>
                         </tr>

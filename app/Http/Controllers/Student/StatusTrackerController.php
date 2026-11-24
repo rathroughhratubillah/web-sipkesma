@@ -16,18 +16,18 @@ class StatusTrackerController extends Controller
 
         $stations = [
             'urin' => [
-                'title' => '1. Tes Urin (Laboratorium)',
-                'desc' => 'Pemeriksaan parameter urin, glukosa, protein, dan sedimen.',
-                'icon' => 'flask',
+                'title' => '1. Tes Buta Warna (Ishihara)',
+                'desc' => 'Pemeriksaan persepsi warna menggunakan buku Ishihara 38 plates untuk mendeteksi buta warna.',
+                'icon' => 'eye',
             ],
             'napza' => [
-                'title' => '2. Tes Skrining Bebas NAPZA',
-                'desc' => 'Uji 6 parameter zat adiktif & narkotika (Amphetamine, THC, Morphine, dll).',
+                'title' => '2. Tes Skrining Bebas NAPZA (6 Parameter)',
+                'desc' => 'Uji spesimen skrining zat adiktif & narkotika (AMP, MET, THC, MOP, COC, BZO).',
                 'icon' => 'shield',
             ],
             'pemeriksaan' => [
-                'title' => '3. Cek Buta Warna',
-                'desc' => 'Tekanan darah, visus mata, buta warna, dan riwayat kesehatan oleh dokter.',
+                'title' => '3. Pemeriksaan Fisik & Dokter',
+                'desc' => 'Pemeriksaan tanda vital (tensi, TB, BB) dan konsultasi medis dengan dokter klinik.',
                 'icon' => 'stethoscope',
             ],
         ];

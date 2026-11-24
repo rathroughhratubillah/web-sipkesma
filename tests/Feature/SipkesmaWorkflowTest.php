@@ -23,7 +23,6 @@ class SipkesmaWorkflowTest extends TestCase
     {
         parent::setUp();
         Role::firstOrCreate(['name' => 'student']);
-        Role::firstOrCreate(['name' => 'staff']);
         Role::firstOrCreate(['name' => 'admin']);
     }
 
@@ -125,7 +124,7 @@ class SipkesmaWorkflowTest extends TestCase
             'status' => 'awaiting_payment',
         ]);
 
-        // 5. Pembayaran
+        // 5. Pembayaran (Upload bukti transfer -> menunggu verifikasi admin)
         $file = UploadedFile::fake()->image('bukti_transfer.jpg');
         $response = $this->actingAs($user)->post('/pembayaran/upload', [
             'proof_file' => $file,
@@ -139,7 +138,27 @@ class SipkesmaWorkflowTest extends TestCase
         ]);
         $this->assertDatabaseHas('registrations', [
             'user_id' => $user->id,
-            'status' => 'awaiting_verification',
+            'status' => 'awaiting_payment',
+        ]);
+
+        // Verifikasi & Persetujuan Pembayaran oleh Admin
+        $adminForApproval = User::create([
+            'name' => 'Admin Approval User',
+            'email' => 'admin_approval@uinssc.ac.id',
+            'password' => Hash::make('password123'),
+        ]);
+        $adminForApproval->assignRole('admin');
+
+        $payment = Payment::where('bank_name', 'Bank Mandiri')->first();
+        $this->actingAs($adminForApproval)->post(route('staff.payments.approve', $payment->id));
+
+        $this->assertDatabaseHas('payments', [
+            'id' => $payment->id,
+            'status' => 'verified',
+        ]);
+        $this->assertDatabaseHas('registrations', [
+            'user_id' => $user->id,
+            'status' => 'cleared',
         ]);
     }
 
@@ -214,5 +233,85 @@ class SipkesmaWorkflowTest extends TestCase
         $reg->refresh();
         $this->assertEquals('cleared', $reg->status);
         $this->assertNotNull($reg->queue_code);
+    }
+
+    public function test_single_admin_role_can_access_both_admin_and_operational_medical_portal()
+    {
+        $admin = User::create([
+            'name' => 'Koordinator Layanan',
+            'email' => 'koordinator@uinssc.ac.id',
+            'password' => Hash::make('password123'),
+        ]);
+        $admin->assignRole('admin');
+
+        // Test login redirect to admin dashboard
+        $loginResponse = $this->post('/login', [
+            'email' => 'koordinator@uinssc.ac.id',
+            'password' => 'password123',
+        ]);
+        $loginResponse->assertRedirect(route('admin.dashboard'));
+
+        // Admin can access admin panel & see progress trend chart and recap guidance banner
+        $dashboardResponse = $this->actingAs($admin)->get('/admin');
+        $dashboardResponse->assertStatus(200);
+        $dashboardResponse->assertSee('Tren Progres (7 Hari Terakhir)');
+        $dashboardResponse->assertSee('Rekap Peserta PPKMB');
+        $dashboardResponse->assertSee('Rekap Riwayat Kesehatan');
+
+        // Admin can access all operational medical features in unified panel
+        $this->actingAs($admin)->get('/petugas')->assertStatus(200);
+        $this->actingAs($admin)->get('/petugas/pembayaran')->assertStatus(200);
+        $this->actingAs($admin)->get('/petugas/checkin')->assertStatus(200);
+        $this->actingAs($admin)->get('/petugas/antrian')->assertRedirect(route('staff.station.index', 'urin'));
+        $this->actingAs($admin)->get('/petugas/stasiun/urin')->assertStatus(200);
+        $this->actingAs($admin)->get('/petugas/stasiun/napza')->assertStatus(200);
+        $this->actingAs($admin)->get('/petugas/stasiun/pemeriksaan')->assertStatus(200);
+        // Test hierarchical participant breakdown (Halaman dipisah: Fakultas -> Jurusan -> Tabel Mahasiswa)
+        $facResponse = $this->actingAs($admin)->get('/petugas/peserta');
+        $facResponse->assertStatus(200);
+        $facResponse->assertSee('Daftar Fakultas (Pilih Salah Satu)');
+
+        $majorListResponse = $this->actingAs($admin)->get('/petugas/peserta?faculty=Fakultas+Ilmu+Tarbiyah+Dan+Keguruan+(FITK)');
+        $majorListResponse->assertStatus(200);
+        $majorListResponse->assertSee('Pilih Program Studi / Jurusan');
+        $majorListResponse->assertSee('Informatika');
+
+        $majResponse = $this->actingAs($admin)->get('/petugas/peserta?faculty=Fakultas+Ilmu+Tarbiyah+Dan+Keguruan+(FITK)&major=Informatika');
+        $majResponse->assertStatus(200);
+        $majResponse->assertSee('Tabel Mahasiswa — Program Studi');
+        $majResponse->assertSee('Informatika');
+
+        // Test export CSV for specific major
+        $exportResponse = $this->actingAs($admin)->get('/petugas/peserta/export?faculty=Fakultas+Ilmu+Tarbiyah+Dan+Keguruan+(FITK)&major=Informatika');
+        $exportResponse->assertStatus(200);
+
+        // Test hierarchical health history breakdown (Halaman dipisah: Fakultas -> Jurusan -> Tabel Riwayat Kesehatan)
+        $healthFacResponse = $this->actingAs($admin)->get('/admin/kesehatan');
+        $healthFacResponse->assertStatus(200);
+        $healthFacResponse->assertSee('Kelola Riwayat Kesehatan Mahasiswa');
+        $healthFacResponse->assertSee('Daftar Fakultas (Pilih Salah Satu)');
+
+        $healthMajListResponse = $this->actingAs($admin)->get('/admin/kesehatan?faculty=Fakultas+Ilmu+Tarbiyah+Dan+Keguruan+(FITK)');
+        $healthMajListResponse->assertStatus(200);
+        $healthMajListResponse->assertSee('Pilih Program Studi / Jurusan');
+        $healthMajListResponse->assertSee('Informatika');
+
+        $healthTableResponse = $this->actingAs($admin)->get('/admin/kesehatan?faculty=Fakultas+Ilmu+Tarbiyah+Dan+Keguruan+(FITK)&major=Informatika');
+        $healthTableResponse->assertStatus(200);
+        $healthTableResponse->assertSee('Tabel Riwayat Kesehatan');
+        $healthTableResponse->assertSee('Informatika');
+
+        // Test export CSV for health history
+        $healthExportResponse = $this->actingAs($admin)->get('/admin/kesehatan/export?faculty=Fakultas+Ilmu+Tarbiyah+Dan+Keguruan+(FITK)&major=Informatika');
+        $healthExportResponse->assertStatus(200);
+
+        // Test edit health form for student
+        $testStudent = User::role('student')->first();
+        if ($testStudent) {
+            $this->actingAs($admin)->get('/admin/kesehatan/' . $testStudent->id . '/edit')->assertStatus(200);
+        }
+
+        // Verify only 2 roles exist in system
+        $this->assertEquals(['admin', 'student'], Role::pluck('name')->sort()->values()->toArray());
     }
 }

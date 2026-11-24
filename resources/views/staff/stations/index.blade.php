@@ -29,7 +29,7 @@
         <div class="flex items-center gap-2">
             <a href="{{ route('staff.station.index', 'urin') }}" 
                class="px-4 py-2 rounded-xl text-xs font-bold transition {{ $station_name === 'urin' ? 'bg-teal-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
-                🧪 1. Tes Urin Lab
+                👁️ 1. Tes Buta Warna
             </a>
             <a href="{{ route('staff.station.index', 'napza') }}" 
                class="px-4 py-2 rounded-xl text-xs font-bold transition {{ $station_name === 'napza' ? 'bg-teal-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100' }}">
@@ -153,8 +153,8 @@
                             <!-- Evaluasi 3 Stasiun -->
                             <td class="p-4">
                                 <div class="flex items-center gap-1.5">
-                                    <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold {{ $urinRes?->status === 'pass' ? 'bg-emerald-500 text-white' : ($urinRes ? 'bg-amber-400 text-slate-900' : 'bg-slate-200 text-slate-500') }}" title="Urin: {{ $urinRes?->status ?? 'Belum' }}">
-                                        U
+                                    <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold {{ $urinRes?->status === 'pass' ? 'bg-emerald-500 text-white' : ($urinRes ? 'bg-amber-400 text-slate-900' : 'bg-slate-200 text-slate-500') }}" title="Buta Warna: {{ $urinRes?->status ?? 'Belum' }}">
+                                        B
                                     </span>
                                     <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold {{ $napzaRes?->status === 'pass' ? 'bg-emerald-500 text-white' : ($napzaRes ? 'bg-amber-400 text-slate-900' : 'bg-slate-200 text-slate-500') }}" title="NAPZA: {{ $napzaRes?->status ?? 'Belum' }}">
                                         N
@@ -262,7 +262,7 @@
                 </div>
 
                 <div class="p-3 rounded-xl bg-slate-50 text-[11px] text-slate-500 border border-slate-200/60">
-                    💡 <em>Jika seluruh 3 stasiun (Urin, NAPZA, dan Fisik) telah berstatus "Pass", sistem secara otomatis mengubah status mahasiswa menjadi "COMPLETED" dan sertifikat resmi langsung dapat diunduh.</em>
+                    💡 <em>Jika seluruh 3 stasiun (Buta Warna, NAPZA, dan Fisik) telah berstatus "Pass", sistem secara otomatis mengubah status mahasiswa menjadi "COMPLETED".</em>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-2">

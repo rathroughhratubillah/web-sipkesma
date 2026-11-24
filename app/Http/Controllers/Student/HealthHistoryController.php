@@ -23,7 +23,7 @@ class HealthHistoryController extends Controller
 
         $validated = $request->validate([
             'blood_type' => ['required', 'string', 'in:A,B,AB,O,Tidak Tahu'],
-            'rhesus' => ['required', 'string', 'in:+,-,Tidak Tahu'],
+            'rhesus' => ['nullable', 'string', 'in:+,-,Tidak Tahu'],
             'height_cm' => ['required', 'numeric', 'min:50', 'max:250'],
             'weight_kg' => ['required', 'numeric', 'min:20', 'max:300'],
             'allergies' => ['nullable', 'string', 'max:500'],
@@ -35,6 +35,8 @@ class HealthHistoryController extends Controller
             'emergency_contact_name' => ['required', 'string', 'max:255'],
             'emergency_contact_phone' => ['required', 'string', 'max:30'],
         ]);
+
+        $validated['rhesus'] = $request->input('rhesus', '+');
 
         HealthHistory::updateOrCreate(
             ['user_id' => $user->id],

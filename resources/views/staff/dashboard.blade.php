@@ -1,6 +1,6 @@
 @extends('layouts.staff')
 
-@section('title', 'Dashboard Petugas')
+@section('title', 'Ringkasan Operasional Medis')
 @section('header_title', 'Ringkasan Pelayanan Skrining Medis')
 
 @section('content')
@@ -50,7 +50,7 @@
             <div>
                 <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Selesai & Lulus</span>
                 <div class="text-2xl font-black text-emerald-600 mt-1">{{ $stats['completed'] }}</div>
-                <span class="text-[11px] text-emerald-600 font-semibold">Sertifikat Terbit</span>
+                <span class="text-[11px] text-emerald-600 font-semibold">Pemeriksaan Selesai</span>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
@@ -69,15 +69,6 @@
         <div class="flex items-center gap-2 flex-wrap">
             <a href="{{ route('staff.payments.index') }}" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold backdrop-blur-md transition">
                 💳 Verifikasi Bayar
-            </a>
-            <a href="{{ route('staff.checkin.index') }}" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold backdrop-blur-md transition">
-                📷 Scanner Check-in
-            </a>
-            <a href="{{ route('staff.queue.display') }}" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold backdrop-blur-md transition">
-                📢 Layar Antrean
-            </a>
-            <a href="{{ route('staff.station.index', 'urin') }}" class="px-3.5 py-2 rounded-xl bg-teal-400 text-slate-900 text-xs font-bold shadow-sm hover:bg-teal-300 transition">
-                🩺 Input 3 Stasiun Tes
             </a>
         </div>
     </div>
@@ -133,10 +124,6 @@
                                     @if($reg->status === 'awaiting_verification')
                                         <a href="{{ route('staff.payments.index') }}" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold text-[11px]">
                                             Verifikasi
-                                        </a>
-                                    @elseif(in_array($reg->status, ['checked_in', 'in_progress']))
-                                        <a href="{{ route('staff.station.index', 'urin') }}" class="px-2.5 py-1 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-semibold text-[11px]">
-                                            Input Tes
                                         </a>
                                     @else
                                         <a href="{{ route('staff.participants.index', ['search' => $reg->queue_code ?: $reg->user?->name]) }}" class="text-teal-600 hover:underline">

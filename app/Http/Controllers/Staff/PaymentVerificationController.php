@@ -15,11 +15,16 @@ class PaymentVerificationController extends Controller
     public function index(Request $request)
     {
         $status = $request->get('status', 'pending');
+        $method = $request->get('method', 'all');
 
         $query = Payment::with(['registration.user.profile', 'registration.testSession', 'verifier']);
 
         if ($status !== 'all') {
             $query->where('status', $status);
+        }
+
+        if ($method !== 'all') {
+            $query->where('bank_name', 'like', "%{$method}%");
         }
 
         $payments = $query->latest()->paginate(15)->withQueryString();
@@ -28,9 +33,11 @@ class PaymentVerificationController extends Controller
             'pending' => Payment::where('status', 'pending')->count(),
             'verified' => Payment::where('status', 'verified')->count(),
             'rejected' => Payment::where('status', 'rejected')->count(),
+            'seabank' => Payment::where('bank_name', 'like', '%SeaBank%')->count(),
+            'dana' => Payment::where('bank_name', 'like', '%DANA%')->count(),
         ];
 
-        return view('staff.payments.index', compact('payments', 'status', 'counts'));
+        return view('staff.payments.index', compact('payments', 'status', 'method', 'counts'));
     }
 
     public function approve(Payment $payment)
@@ -43,25 +50,8 @@ class PaymentVerificationController extends Controller
             $registration = $payment->registration()->lockForUpdate()->first();
             $session = $registration->testSession;
 
-            // Generate sequential queue code per test session (e.g., A-001, A-002)
-            $existingQueueCodes = Registration::where('test_session_id', $session?->id)
-                ->whereNotNull('queue_code')
-                ->lockForUpdate()
-                ->pluck('queue_code')
-                ->toArray();
-
-            $maxNumber = 0;
-            foreach ($existingQueueCodes as $code) {
-                if (preg_match('/^[A-Z]-(\d+)$/', $code, $matches)) {
-                    $num = (int) $matches[1];
-                    if ($num > $maxNumber) {
-                        $maxNumber = $num;
-                    }
-                }
-            }
-
-            $nextNumber = $maxNumber + 1;
-            $queueCode = 'A-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+            // Generate sequential queue code safely if not yet assigned
+            $queueCode = $registration->queue_code ?: Registration::generateNextQueueCode($session?->id);
 
             // Update Payment
             $payment->update([

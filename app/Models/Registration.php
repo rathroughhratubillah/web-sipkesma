@@ -78,6 +78,31 @@ class Registration extends Model
     }
 
     /**
+     * Generate sequential queue code safely with database locking.
+     * Guarantees strict FIFO order and prevents collision even when multiple users register simultaneously.
+     */
+    public static function generateNextQueueCode(?int $sessionId = null): string
+    {
+        $existingCodes = self::whereNotNull('queue_code')
+            ->lockForUpdate()
+            ->pluck('queue_code')
+            ->toArray();
+
+        $maxNumber = 0;
+        foreach ($existingCodes as $code) {
+            if (preg_match('/^[A-Z]-(\d+)$/', $code, $matches)) {
+                $num = (int) $matches[1];
+                if ($num > $maxNumber) {
+                    $maxNumber = $num;
+                }
+            }
+        }
+
+        $nextNumber = $maxNumber + 1;
+        return 'A-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * Determine active stage in 11-step workflow
      * 1: Registrasi & Login
      * 2: Lengkapi Data Diri

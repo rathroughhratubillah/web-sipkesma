@@ -153,6 +153,53 @@
                 </dl>
             </div>
 
+            {{-- Card 3: Stasiun Pemeriksaan di Klinik --}}
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-4">
+                <div class="flex items-center gap-2 pb-2 border-b border-slate-50">
+                    <svg class="w-4 h-4 text-teal-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                    <h3 class="text-base font-bold text-slate-900">Yang Akan Diperiksa di Klinik</h3>
+                </div>
+
+                <p class="text-xs text-slate-500">
+                    Saat hari pemeriksaan, kamu akan melewati <span class="font-semibold text-slate-700">3 stasiun tes</span> berikut di Klinik Kampus – Gedung A.
+                </p>
+
+                <div class="space-y-3">
+                    {{-- Stasiun 1: Tes Buta Warna --}}
+                    <div class="flex items-start gap-3 p-3 rounded-2xl bg-blue-50 border border-blue-100">
+                        <div class="shrink-0 w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">1</div>
+                        <div>
+                            <p class="text-sm font-semibold text-blue-900">Tes Buta Warna</p>
+                            <p class="text-xs text-blue-700 mt-0.5">Pemeriksaan persepsi warna menggunakan buku Ishihara untuk mendeteksi buta warna parsial maupun total.</p>
+                        </div>
+                    </div>
+
+                    {{-- Stasiun 2: Tes NAPZA --}}
+                    <div class="flex items-start gap-3 p-3 rounded-2xl bg-amber-50 border border-amber-100">
+                        <div class="shrink-0 w-8 h-8 rounded-xl bg-amber-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">2</div>
+                        <div>
+                            <p class="text-sm font-semibold text-amber-900">Skrining NAPZA 6 Parameter</p>
+                            <p class="text-xs text-amber-700 mt-0.5">Uji spesimen urin untuk memastikan bebas narkoba: AMP, MET, THC, MOP, COC, dan BZO.</p>
+                        </div>
+                    </div>
+
+                    {{-- Stasiun 3: Pemeriksaan Fisik --}}
+                    <div class="flex items-start gap-3 p-3 rounded-2xl bg-emerald-50 border border-emerald-100">
+                        <div class="shrink-0 w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">3</div>
+                        <div>
+                            <p class="text-sm font-semibold text-emerald-900">Pemeriksaan Fisik & Dokter</p>
+                            <p class="text-xs text-emerald-700 mt-0.5">Cek tanda vital (tekanan darah, berat & tinggi badan) dan konsultasi langsung dengan dokter klinik.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-400 pt-1">
+                    💡 Data riwayat kesehatan yang kamu isi akan digunakan dokter pada Stasiun 3.
+                </p>
+            </div>
+
         </div>
 
     </div>

@@ -229,9 +229,9 @@
             @endphp
             <tr>
                 <td style="text-align: center;">1</td>
-                <td><strong>Tes Urin Lengkap</strong><br><small style="color: #64748b;">Protein, Glukosa, Sedimen & Fungsi Ginjal</small></td>
+                <td><strong>Tes Buta Warna (Ishihara)</strong><br><small style="color: #64748b;">Persepsi Warna & Pelat Ishihara</small></td>
                 <td><span class="badge-pass">LAYAK / NORMAL</span></td>
-                <td>{{ $urin?->notes ?: 'Dalam batas normal, reduksi (-), albumin (-)' }}</td>
+                <td>{{ $urin?->notes ?: 'Persepsi warna normal, bebas buta warna' }}</td>
             </tr>
             <tr>
                 <td style="text-align: center;">2</td>
@@ -241,9 +241,9 @@
             </tr>
             <tr>
                 <td style="text-align: center;">3</td>
-                <td><strong>Pemeriksaan Fisik & Dokter</strong><br><small style="color: #64748b;">TTV, Visus Mata, Buta Warna, Fisik</small></td>
+                <td><strong>Pemeriksaan Fisik & Dokter</strong><br><small style="color: #64748b;">TTV, Tekanan Darah, Konsultasi Dokter</small></td>
                 <td><span class="badge-pass">SEHAT / LAYAK</span></td>
-                <td>{{ $fisik?->notes ?: 'Tensi normal, buta warna negatif, fisik prima' }}</td>
+                <td>{{ $fisik?->notes ?: 'Tensi normal, kondisi fisik prima' }}</td>
             </tr>
         </tbody>
     </table>

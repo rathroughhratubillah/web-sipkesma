@@ -42,31 +42,17 @@
         <form method="POST" action="{{ route('student.health_history.store') }}" class="space-y-6">
             @csrf
 
-            <!-- Golongan Darah & Rhesus -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        Golongan Darah <span class="text-rose-500">*</span>
-                    </label>
-                    <select name="blood_type" required
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-sm outline-hidden transition bg-white">
-                        @foreach(['A', 'B', 'AB', 'O', 'Tidak Tahu'] as $bt)
-                            <option value="{{ $bt }}" {{ old('blood_type', $health->blood_type ?? '') === $bt ? 'selected' : '' }}>{{ $bt }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        Rhesus Darah <span class="text-rose-500">*</span>
-                    </label>
-                    <select name="rhesus" required
-                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-sm outline-hidden transition bg-white">
-                        <option value="+" {{ old('rhesus', $health->rhesus ?? '+') === '+' ? 'selected' : '' }}>Positif (+)</option>
-                        <option value="-" {{ old('rhesus', $health->rhesus ?? '') === '-' ? 'selected' : '' }}>Negatif (-)</option>
-                        <option value="Tidak Tahu" {{ old('rhesus', $health->rhesus ?? '') === 'Tidak Tahu' ? 'selected' : '' }}>Tidak Tahu</option>
-                    </select>
-                </div>
+            <!-- Golongan Darah -->
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                    Golongan Darah <span class="text-rose-500">*</span>
+                </label>
+                <select name="blood_type" required
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-sm outline-hidden transition bg-white">
+                    @foreach(['A', 'B', 'AB', 'O', 'Tidak Tahu'] as $bt)
+                        <option value="{{ $bt }}" {{ old('blood_type', $health->blood_type ?? '') === $bt ? 'selected' : '' }}>{{ $bt }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- Tinggi, Berat, Kalkulator BMI Otomatis -->

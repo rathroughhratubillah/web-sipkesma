@@ -2,137 +2,208 @@
 
 @section('title', 'Dashboard Admin')
 @section('header_title', 'Dashboard Admin')
-@section('header_subtitle', 'Ringkasan semua data yang tersimpan di database')
+@section('header_subtitle', 'Ringkasan data dan progres skrining PPKMB')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-5">
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Pengguna</span>
-                <div class="w-9 h-9 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
-                </div>
-            </div>
-            <div class="text-3xl font-black text-slate-900">{{ $stats['total_users'] }}</div>
-            <a href="{{ route('admin.users.index') }}" class="text-xs text-violet-600 font-semibold mt-1 block hover:underline">Kelola Pengguna →</a>
-        </div>
-
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Profil Terisi</span>
-                <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                </div>
-            </div>
-            <div class="text-3xl font-black text-slate-900">{{ $stats['total_profiles'] }}</div>
-            <a href="{{ route('admin.profiles.index') }}" class="text-xs text-blue-600 font-semibold mt-1 block hover:underline">Lihat Profil →</a>
-        </div>
-
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Data Kesehatan</span>
-                <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
-                </div>
-            </div>
-            <div class="text-3xl font-black text-slate-900">{{ $stats['total_health'] }}</div>
-            <a href="{{ route('admin.health.index') }}" class="text-xs text-rose-600 font-semibold mt-1 block hover:underline">Lihat Data →</a>
-        </div>
-
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Selesai Skrining</span>
-                <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
-                </div>
-            </div>
-            <div class="text-3xl font-black text-slate-900">{{ $stats['completed'] }}</div>
-            <span class="text-xs text-emerald-600 font-semibold mt-1 block">Sertifikat Terbit</span>
-        </div>
-
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        @php
-        $quickLinks = [
-            ['label' => 'Pengguna', 'icon' => '👤', 'route' => 'admin.users.index', 'count' => $stats['total_users'], 'color' => 'violet'],
-            ['label' => 'Profil', 'icon' => '🎓', 'route' => 'admin.profiles.index', 'count' => $stats['total_profiles'], 'color' => 'blue'],
-            ['label' => 'Kesehatan', 'icon' => '🏥', 'route' => 'admin.health.index', 'count' => $stats['total_health'], 'color' => 'rose'],
-            ['label' => 'Registrasi', 'icon' => '📋', 'route' => 'admin.registrations.index', 'count' => $stats['total_registrations'], 'color' => 'amber'],
-            ['label' => 'Pembayaran', 'icon' => '💳', 'route' => 'admin.payments.index', 'count' => $stats['total_payments'], 'color' => 'emerald'],
-            ['label' => 'Hasil Skrining', 'icon' => '🔬', 'route' => 'admin.results.index', 'count' => $stats['total_results'], 'color' => 'cyan'],
-        ];
-        @endphp
-
-        @foreach($quickLinks as $link)
-        <a href="{{ route($link['route']) }}" 
-           class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all group flex items-center gap-3">
-            <div class="text-2xl">{{ $link['icon'] }}</div>
+    {{-- 1. STAT CARDS --}}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <a href="{{ route('admin.users.index') }}" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs hover:shadow-md hover:border-teal-300 transition group flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-base shrink-0">👤</div>
             <div>
-                <div class="text-xs text-slate-500 font-medium">{{ $link['label'] }}</div>
-                <div class="text-xl font-black text-slate-900">{{ $link['count'] }}</div>
+                <div class="text-2xl font-black text-slate-900 leading-tight">{{ $stats['total_users'] }}</div>
+                <div class="text-xs text-slate-400 font-medium">Pengguna</div>
             </div>
-            <svg class="w-4 h-4 text-slate-400 ml-auto group-hover:text-violet-600 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
         </a>
-        @endforeach
+
+
+
+
+        <a href="{{ route('admin.profiles.index') }}" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs hover:shadow-md hover:border-blue-300 transition group flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-base shrink-0">🎓</div>
+            <div>
+                <div class="text-2xl font-black text-slate-900 leading-tight">{{ $stats['total_profiles'] }}</div>
+                <div class="text-xs text-slate-400 font-medium">Profil Mahasiswa</div>
+            </div>
+        </a>
+
+        
+
+        <a href="{{ route('admin.health.index') }}" class="bg-white rounded-2xl
+         p-4 border border-slate-200 shadow-xs hover:shadow-md hover:border-rose-300 transition group flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-base shrink-0">🩺</div>
+            <div>
+                <div class="text-2xl font-black text-slate-900 leading-tight">{{ $stats['total_health'] }}</div>
+                <div class="text-xs text-slate-400 font-medium">Riwayat Kesehatan</div>
+            </div>
+        </a>
+
+        <div class="bg-white rounded-2xl p-4 border border-emerald-200 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base shrink-0">📜</div>
+            <div>
+                <div class="text-2xl font-black text-emerald-700 leading-tight">{{ $stats['completed'] }}</div>
+                <div class="text-xs text-slate-400 font-medium">Lulus Skrining</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Recent Users Table -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+    {{-- 2. DAFTAR CEPAT + GRAFIK (side by side on large screens) --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        {{-- 2a. Arahan Rekap (compact) --}}
+        <div class="bg-slate-900 rounded-2xl p-5 space-y-4 border border-slate-800">
             <div>
-                <h2 class="text-sm font-bold text-slate-800">Pengguna Terbaru yang Daftar</h2>
-                <p class="text-xs text-slate-400 mt-0.5">Semua data tersimpan otomatis di database</p>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-teal-400">Panduan Rekap Data</span>
+                <h2 class="text-sm font-black text-white mt-1 leading-snug">
+                    Lihat data mahasiswa per fakultas &amp; jurusan
+                </h2>
+                <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
+                    Pilih fakultas → pilih jurusan → buka tabel mahasiswa. Tersedia ekspor CSV per jurusan.
+                </p>
             </div>
-            <a href="{{ route('admin.users.index') }}" class="text-xs font-semibold text-violet-600 hover:underline">Lihat Semua →</a>
+
+            <div class="space-y-2">
+                <a href="{{ route('staff.participants.index') }}"
+                   class="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-white font-bold text-xs transition">
+                    <span>📋 Rekap Peserta PPKMB</span>
+                    <span>&rarr;</span>
+                </a>
+                <a href="{{ route('admin.health.index') }}"
+                   class="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition">
+                    <span>🩺 Rekap Riwayat Kesehatan</span>
+                    <span>&rarr;</span>
+                </a>
+            </div>
+
+            {{-- Shortcut Fakultas --}}
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-2">Akses Cepat Fakultas</span>
+                <div class="space-y-1.5">
+                    @php
+                        $facShort = [
+                            'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)' => 'FITK',
+                            'Fakultas Ekonomi Dan Bisnis Islam (FEBI)'   => 'FEBI',
+                            'Fakultas Syariah'                            => 'Syariah',
+                            'Fakultas Dakwah Dan Komunikasi Islam (FDKI)' => 'FDKI',
+                            'Fakultas Ushuluddin Dan Arab'                => 'Ushuluddin',
+                        ];
+                    @endphp
+                    @foreach($facShort as $facKey => $facLabel)
+                        @php $cnt = $facultyCounts[$facKey] ?? 0; @endphp
+                        <a href="{{ route('staff.participants.index', ['faculty' => $facKey]) }}"
+                           class="flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-teal-900/60 border border-slate-700/60 hover:border-teal-500/50 text-xs text-slate-300 hover:text-white font-medium transition">
+                            <span>{{ $facLabel }}</span>
+                            <span class="font-mono font-bold text-teal-400 text-[10px]">{{ $cnt }} Mhs</span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- 2b. Grafik (area chart compact) --}}
+        <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+                        <h2 class="text-sm font-black text-slate-900">Tren Progres (7 Hari Terakhir)</h2>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Pendaftaran, pembayaran, dan penyelesaian skrining</p>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap text-[11px] font-bold">
+                    <span class="flex items-center gap-1 text-teal-700"><span class="w-2 h-2 rounded-full bg-teal-500 inline-block"></span> Daftar</span>
+                    <span class="flex items-center gap-1 text-blue-700"><span class="w-2 h-2 rounded-full bg-blue-500 inline-block"></span> Bayar</span>
+                    <span class="flex items-center gap-1 text-emerald-700"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> Selesai</span>
+                </div>
+            </div>
+
+            <div class="relative h-52">
+                <canvas id="progressTrendChart" class="w-full h-full"></canvas>
+            </div>
+
+            {{-- Status Funnel strip --}}
+            <div class="pt-3 border-t border-slate-100 grid grid-cols-7 gap-1.5 text-center">
+                @php
+                $steps = [
+                    ['label' => 'Draft',     'color' => 'slate',   'val' => $statusCounts['draft']],
+                    ['label' => 'Tunggu\nBayar', 'color' => 'amber', 'val' => $statusCounts['awaiting_payment']],
+                    ['label' => 'Tunggu\nVerif', 'color' => 'blue',  'val' => $statusCounts['awaiting_verification']],
+                    ['label' => 'Tiket',     'color' => 'cyan',    'val' => $statusCounts['cleared']],
+                    ['label' => 'Hadir',     'color' => 'indigo',  'val' => $statusCounts['checked_in']],
+                    ['label' => 'Diperiksa', 'color' => 'purple',  'val' => $statusCounts['in_progress']],
+                    ['label' => 'Selesai',   'color' => 'emerald', 'val' => $statusCounts['completed']],
+                ];
+                $colorMap = [
+                    'slate'   => 'bg-slate-100 text-slate-600',
+                    'amber'   => 'bg-amber-100 text-amber-700',
+                    'blue'    => 'bg-blue-100 text-blue-700',
+                    'cyan'    => 'bg-cyan-100 text-cyan-700',
+                    'indigo'  => 'bg-indigo-100 text-indigo-700',
+                    'purple'  => 'bg-purple-100 text-purple-700',
+                    'emerald' => 'bg-emerald-100 text-emerald-700',
+                ];
+                @endphp
+                @foreach($steps as $step)
+                <div class="rounded-xl p-2 {{ $colorMap[$step['color']] }}">
+                    <div class="text-base font-black leading-none">{{ $step['val'] }}</div>
+                    <div class="text-[9px] font-semibold mt-1 leading-tight">{{ str_replace('\n', '<br>', $step['label']) }}</div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    {{-- 3. RECENT USERS TABLE (compact) --}}
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="text-sm font-bold text-slate-800">Pengguna Terbaru</h2>
+            <div class="flex items-center gap-3 text-xs font-semibold">
+                <a href="{{ route('staff.participants.index') }}" class="text-teal-600 hover:underline">Rekap Peserta &rarr;</a>
+                <a href="{{ route('admin.users.index') }}" class="text-slate-400 hover:text-slate-700 transition">Lihat Semua &rarr;</a>
+            </div>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead class="bg-slate-50 text-slate-500 font-bold uppercase border-b border-slate-100">
                     <tr>
-                        <th class="px-5 py-3">Pengguna</th>
-                        <th class="px-5 py-3">NISN</th>
-                        <th class="px-5 py-3">Fakultas</th>
-                        <th class="px-5 py-3">Status Registrasi</th>
-                        <th class="px-5 py-3 text-right">Aksi</th>
+                        <th class="px-4 py-3">Pengguna</th>
+                        <th class="px-4 py-3">NIM</th>
+                        <th class="px-4 py-3 hidden sm:table-cell">Fakultas</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3 text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                    @forelse($recentUsers as $user)
+                    @forelse($recentUsers as $u)
                     <tr class="hover:bg-slate-50/60 transition">
-                        <td class="px-5 py-3">
-                            <div class="font-semibold text-slate-800">{{ $user->name }}</div>
-                            <div class="text-[11px] text-slate-400">{{ $user->email }}</div>
+                        <td class="px-4 py-2.5">
+                            <div class="font-semibold text-slate-800 truncate max-w-[140px]">{{ $u->name }}</div>
+                            <div class="text-[11px] text-slate-400 truncate max-w-[140px]">{{ $u->email }}</div>
                         </td>
-                        <td class="px-5 py-3 font-mono text-slate-600">{{ $user->profile?->nim ?? '—' }}</td>
-                        <td class="px-5 py-3 text-slate-600 max-w-[200px] truncate">{{ $user->profile?->faculty ?? '—' }}</td>
-                        <td class="px-5 py-3">
-                            @if($user->registration)
+                        <td class="px-4 py-2.5 font-mono text-slate-600 text-[11px]">{{ $u->profile?->nim ?? '—' }}</td>
+                        <td class="px-4 py-2.5 hidden sm:table-cell text-slate-500 max-w-[180px] truncate text-[11px]">{{ $u->profile?->faculty ?? '—' }}</td>
+                        <td class="px-4 py-2.5">
+                            @if($u->registration)
                                 <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold
-                                    {{ $user->registration->status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
-                                       ($user->registration->status === 'draft' ? 'bg-slate-100 text-slate-600' : 'bg-amber-100 text-amber-700') }}">
-                                    {{ $user->registration->status }}
+                                    {{ match($u->registration->status) {
+                                        'completed' => 'bg-emerald-100 text-emerald-700',
+                                        'draft'     => 'bg-slate-100 text-slate-500',
+                                        default     => 'bg-amber-100 text-amber-700'
+                                    } }}">
+                                    {{ $u->registration->status }}
                                 </span>
                             @else
                                 <span class="text-slate-400">—</span>
                             @endif
                         </td>
-                        <td class="px-5 py-3 text-right">
-                            <a href="{{ route('admin.users.edit', $user) }}" 
-                               class="px-3 py-1 rounded-lg bg-violet-50 text-violet-700 text-[11px] font-semibold hover:bg-violet-100 transition">
-                                Edit
-                            </a>
+                        <td class="px-4 py-2.5 text-right">
+                            <a href="{{ route('admin.users.edit', $u) }}"
+                               class="px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 text-[11px] font-semibold hover:bg-teal-100 transition">Edit</a>
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="5" class="px-5 py-10 text-center text-slate-400">Belum ada pengguna terdaftar.</td>
-                    </tr>
+                    <tr><td colspan="5" class="px-4 py-8 text-center text-slate-400">Belum ada pengguna.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -140,4 +211,90 @@
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const canvas = document.getElementById('progressTrendChart');
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    const ctx = canvas.getContext('2d');
+
+    const gReg = ctx.createLinearGradient(0, 0, 0, 200);
+    gReg.addColorStop(0, 'rgba(13,148,136,0.28)');
+    gReg.addColorStop(1, 'rgba(13,148,136,0)');
+
+    const gPay = ctx.createLinearGradient(0, 0, 0, 200);
+    gPay.addColorStop(0, 'rgba(59,130,246,0.18)');
+    gPay.addColorStop(1, 'rgba(59,130,246,0)');
+
+    const gComp = ctx.createLinearGradient(0, 0, 0, 200);
+    gComp.addColorStop(0, 'rgba(16,185,129,0.22)');
+    gComp.addColorStop(1, 'rgba(16,185,129,0)');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @json($chartDates),
+            datasets: [
+                {
+                    label: 'Pendaftaran',
+                    data: @json($chartRegistrations),
+                    borderColor: '#0d9488',
+                    backgroundColor: gReg,
+                    fill: true, tension: 0.4, borderWidth: 2.5,
+                    pointBackgroundColor: '#0d9488', pointBorderColor: '#fff',
+                    pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 6,
+                },
+                {
+                    label: 'Bayar Diverifikasi',
+                    data: @json($chartPayments),
+                    borderColor: '#3b82f6',
+                    backgroundColor: gPay,
+                    fill: true, tension: 0.4, borderWidth: 2,
+                    pointBackgroundColor: '#3b82f6', pointBorderColor: '#fff',
+                    pointBorderWidth: 2, pointRadius: 3.5, pointHoverRadius: 5.5,
+                },
+                {
+                    label: 'Selesai Skrining',
+                    data: @json($chartCompleted),
+                    borderColor: '#10b981',
+                    backgroundColor: gComp,
+                    fill: true, tension: 0.4, borderWidth: 2,
+                    pointBackgroundColor: '#10b981', pointBorderColor: '#fff',
+                    pointBorderWidth: 2, pointRadius: 3.5, pointHoverRadius: 5.5,
+                },
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#0f172a',
+                    titleColor: '#f8fafc',
+                    bodyColor: '#cbd5e1',
+                    titleFont: { size: 11, weight: 'bold' },
+                    bodyFont: { size: 11 },
+                    padding: 10, cornerRadius: 10, boxPadding: 4,
+                    usePointStyle: true,
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 10, weight: '600' }, color: '#94a3b8' }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' },
+                    ticks: { precision: 0, font: { size: 10 }, color: '#cbd5e1' }
+                }
+            }
+        }
+    });
+});
+</script>
 @endsection

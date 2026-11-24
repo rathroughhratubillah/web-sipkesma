@@ -41,4 +41,9 @@ return [
         'redirect'      => env('GOOGLE_REDIRECT_URI', '/auth/google/callback'),
     ],
 
+    'campus' => [
+        'base_url' => env('CAMPUS_API_BASE_URL', 'https://bridge.uinssc.ac.id'),
+        'timeout'  => (int) env('CAMPUS_API_TIMEOUT', 8),
+    ],
+
 ];

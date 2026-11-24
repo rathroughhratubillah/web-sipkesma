@@ -11,7 +11,7 @@
             <p class="text-sm text-slate-500 mt-1">Dokumen resmi kelulusan skrining kesehatan untuk syarat registrasi PPKMB.</p>
         </div>
         <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-200">
-            Langkah 11 dari 11
+            Tahap Akhir (Hasil Skrining)
         </span>
     </div>
 
@@ -34,19 +34,19 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm bg-slate-50 p-5 rounded-2xl border border-slate-200/60">
                 <div>
                     <span class="text-slate-400 block font-medium">Nama Mahasiswa</span>
-                    <span class="font-bold text-slate-900 text-base">{{ $user->profile->full_name }}</span>
+                    <span class="font-bold text-slate-900 text-base">{{ $user->profile?->full_name ?? $user->name }}</span>
                 </div>
                 <div>
-                    <span class="text-slate-400 block font-medium">NISN</span>
-                    <span class="font-bold text-slate-900 font-mono text-base">{{ $user->profile->nim }}</span>
+                    <span class="text-slate-400 block font-medium">NISN / NIM</span>
+                    <span class="font-bold text-slate-900 font-mono text-base">{{ $user->profile?->nim ?? '-' }}</span>
                 </div>
                 <div>
                     <span class="text-slate-400 block font-medium">Fakultas / Program Studi</span>
-                    <span class="font-semibold text-slate-800">{{ $user->profile->faculty }} &middot; {{ $user->profile->major }}</span>
+                    <span class="font-semibold text-slate-800">{{ $user->profile?->faculty ?? '-' }} &middot; {{ $user->profile?->major ?? '-' }}</span>
                 </div>
                 <div>
                     <span class="text-slate-400 block font-medium">Golongan Darah / BMI</span>
-                    <span class="font-semibold text-slate-800">{{ $user->healthHistory->blood_type }} ({{ $user->healthHistory->rhesus }}) &middot; BMI {{ $user->healthHistory->bmi }} ({{ $user->healthHistory->bmi_status }})</span>
+                    <span class="font-semibold text-slate-800">{{ $user->healthHistory?->blood_type ?? '-' }} ({{ $user->healthHistory?->rhesus ?? '-' }}) &middot; BMI {{ $user->healthHistory?->bmi ?? '-' }} ({{ $user->healthHistory?->bmi_status ?? '-' }})</span>
                 </div>
             </div>
 
@@ -64,7 +64,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 font-medium">
-                            @foreach(['urin' => 'Tes Urin Lengkap', 'napza' => 'Skrining Bebas NAPZA (6 Parameter)', 'pemeriksaan' => 'Pemeriksaan Fisik & TTV'] as $stKey => $stLabel)
+                            @foreach(['urin' => 'Tes Buta Warna (Ishihara)', 'napza' => 'Skrining Bebas NAPZA (6 Parameter)', 'pemeriksaan' => 'Pemeriksaan Fisik & Dokter'] as $stKey => $stLabel)
                                 @php $res = $registration->getStationResult($stKey); @endphp
                                 <tr>
                                     <td class="p-3 font-semibold text-slate-900">{{ $stLabel }}</td>
@@ -103,11 +103,14 @@
             </div>
             <h2 class="text-xl font-bold text-slate-800">Sertifikat Belum Tersedia</h2>
             <p class="text-sm text-slate-500 max-w-md mx-auto">
-                Sertifikat kesehatan resmi hanya dapat diunduh setelah Anda menyelesaikan check-in dan seluruh 3 stasiun medis (Tes Urin, Tes NAPZA, dan Pemeriksaan Fisik) dinyatakan lulus (<strong class="text-emerald-600">PASS</strong>) oleh dokter pemeriksa.
+                Sertifikat kesehatan resmi hanya dapat diunduh setelah Anda menyelesaikan pemeriksaan di 3 stasiun medis klinik kampus (Tes Buta Warna, Skrining NAPZA, dan Pemeriksaan Fisik & Dokter) dan dinyatakan lulus (<strong class="text-emerald-600">PASS</strong>) oleh dokter pemeriksa.
             </p>
-            <div class="pt-2">
-                <a href="{{ route('student.status') }}" class="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md shadow-teal-600/20 transition inline-block">
-                    Cek Status Pemeriksaan &rarr;
+            <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <a href="{{ route('student.ticket') }}" class="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md shadow-teal-600/20 transition inline-block">
+                    Lihat Tiket Antrean &rarr;
+                </a>
+                <a href="{{ route('student.status') }}" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition inline-block">
+                    Cek Status Pemeriksaan
                 </a>
             </div>
         </div>

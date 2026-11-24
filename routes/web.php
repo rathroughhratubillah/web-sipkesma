@@ -67,20 +67,18 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/pembayaran', [StudentPaymentController::class, 'index'])->name('student.payment');
     Route::post('/pembayaran/upload', [StudentPaymentController::class, 'store'])->name('student.payment.store');
 
-    // 6. Tiket Antrean & QR
+    // 6. Tiket Antrean & QR (Tahap Akhir Mahasiswa Online)
     Route::get('/tiket', [TicketController::class, 'index'])->name('student.ticket');
     Route::get('/tiket/download', [TicketController::class, 'downloadPdf'])->name('student.ticket.download');
 
-    // 7. Status Pemeriksaan
-    Route::get('/status', [StatusTrackerController::class, 'index'])->name('student.status');
-
-    // 8. Sertifikat Kesehatan
-    Route::get('/sertifikat', [CertificateController::class, 'index'])->name('student.certificate');
-    Route::get('/sertifikat/download', [CertificateController::class, 'download'])->name('student.certificate.download');
+    // Redirect jika mahasiswa mengakses sertifikat/status lama langsung ke Tiket
+    Route::get('/sertifikat', fn() => redirect()->route('student.ticket'))->name('student.certificate');
+    Route::get('/sertifikat/download', fn() => redirect()->route('student.ticket'))->name('student.certificate.download');
+    Route::get('/status', fn() => redirect()->route('student.ticket'))->name('student.status');
 });
 
-// Staff & Admin Portal (Roles: staff, admin)
-Route::middleware(['auth', 'role:staff|admin'])->prefix('petugas')->as('staff.')->group(function () {
+// Operasional Pelayanan Skrining Medis (Role: admin)
+Route::middleware(['auth', 'role:admin'])->prefix('petugas')->as('staff.')->group(function () {
     // 1. Dashboard Ringkasan
     Route::get('/', [StaffDashboardController::class, 'index'])->name('dashboard');
 
@@ -136,9 +134,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->as('admin.')->group(
 
     // Kelola Riwayat Kesehatan
     Route::get('/kesehatan', [AdminController::class, 'healthHistories'])->name('health.index');
-    Route::get('/kesehatan/{healthHistory}/edit', [AdminController::class, 'editHealth'])->name('health.edit');
-    Route::put('/kesehatan/{healthHistory}', [AdminController::class, 'updateHealth'])->name('health.update');
-    Route::delete('/kesehatan/{healthHistory}', [AdminController::class, 'destroyHealth'])->name('health.destroy');
+    Route::get('/kesehatan/export', [AdminController::class, 'exportHealthCsv'])->name('health.export');
+    Route::get('/kesehatan/{id}/edit', [AdminController::class, 'editHealth'])->name('health.edit');
+    Route::put('/kesehatan/{id}', [AdminController::class, 'updateHealth'])->name('health.update');
+    Route::delete('/kesehatan/{id}', [AdminController::class, 'destroyHealth'])->name('health.destroy');
 
     // Kelola Registrasi
     Route::get('/registrasi', [AdminController::class, 'registrations'])->name('registrations.index');
@@ -151,10 +150,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->as('admin.')->group(
     Route::put('/pembayaran/{payment}/status', [AdminController::class, 'updatePaymentStatus'])->name('payments.update');
     Route::delete('/pembayaran/{payment}', [AdminController::class, 'destroyPayment'])->name('payments.destroy');
 
-    // Kelola Hasil Pemeriksaan / Stasiun Medis
-    Route::get('/hasil-skrining', [AdminController::class, 'results'])->name('results.index');
-    Route::get('/hasil-skrining/{stationResult}/edit', [AdminController::class, 'editResult'])->name('results.edit');
-    Route::put('/hasil-skrining/{stationResult}', [AdminController::class, 'updateResult'])->name('results.update');
-    Route::delete('/hasil-skrining/{stationResult}', [AdminController::class, 'destroyResult'])->name('results.destroy');
+    // (Halaman hasil skrining medis dihapus)
 });
 

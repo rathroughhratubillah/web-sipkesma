@@ -14,10 +14,8 @@
     <!-- Tailwind CSS & JS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Alpine.js fallback CDN if vite bundling takes a moment -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
-    
     <style>
+        [x-cloak] { display: none !important; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f6fbfa;
@@ -83,8 +81,6 @@
                         ['route' => 'student.confirmation', 'label' => 'Konfirmasi', 'prefix' => 'konfirmasi'],
                         ['route' => 'student.payment', 'label' => 'Pembayaran', 'prefix' => 'pembayaran'],
                         ['route' => 'student.ticket', 'label' => 'Tiket', 'prefix' => 'tiket'],
-                        ['route' => 'student.status', 'label' => 'Status', 'prefix' => 'status'],
-                        ['route' => 'student.certificate', 'label' => 'Sertifikat', 'prefix' => 'sertifikat'],
                     ];
                 @endphp
 
@@ -156,8 +152,6 @@
             </div>
         </div>
     </footer>
-
-    @include('partials.demo-switcher')
 
     @stack('scripts')
 </body>

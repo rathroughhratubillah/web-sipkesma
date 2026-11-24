@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Profile;
 use App\Models\Registration;
+use App\Services\CampusApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -30,9 +32,79 @@ class AuthController extends Controller
         $loginInput = trim($validated['email']);
         $password = $validated['password'];
 
-        // 1. Cari user berdasarkan email (case-insensitive) atau nama
+        // 1. Integrasi API Portal Kampus v2 (NIP Pegawai / Username Admin / Mahasiswa)
+        $campusApi = new CampusApiService();
+        $campusAuth = $campusApi->login($loginInput, $password);
+
+        if ($campusAuth && !empty($campusAuth['username'])) {
+            $identifier = $campusAuth['username'];
+            $roleName = strtolower($campusAuth['role'] ?? 'student');
+            $isAdminOrStaff = in_array($roleName, ['admin', 'pegawai', 'staff', 'staf', 'dosen']);
+
+            $token = $campusAuth['token'] ?? null;
+            $campusProfile = $token ? $campusApi->getProfile($token) : null;
+
+            $email = $campusAuth['email'] ?? ($campusProfile['email'] ?? ($identifier . '@uinssc.ac.id'));
+            $fullName = $campusProfile['nama'] ?? ($campusAuth['nama'] ?? $identifier);
+
+            $user = User::where('email', $email)
+                ->orWhereHas('profile', fn($q) => $q->where('nim', $identifier))
+                ->first();
+
+            $targetRole = $isAdminOrStaff ? 'admin' : 'student';
+
+            if (!$user) {
+                $user = User::create([
+                    'name' => $fullName,
+                    'email' => $email,
+                    'password' => Hash::make($password),
+                ]);
+                $role = Role::firstOrCreate(['name' => $targetRole]);
+                $user->assignRole($role);
+            } else {
+                $user->update(['password' => Hash::make($password)]);
+                if (!$user->hasRole($targetRole)) {
+                    $user->assignRole(Role::firstOrCreate(['name' => $targetRole]));
+                }
+            }
+
+            // Jika bukan admin/staf (mahasiswa), kelola data profil dan pendaftaran
+            if (!$isAdminOrStaff) {
+                Profile::updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'nim'        => $identifier,
+                        'full_name'  => $fullName,
+                        'faculty'    => $campusProfile['fakultas_nama'] ?? ($user->profile?->faculty ?? 'Fakultas Ilmu Tarbiyah Dan Keguruan (FITK)'),
+                        'major'      => $campusProfile['program_studi_nama'] ?? ($user->profile?->major ?? 'Tadris Matematika'),
+                        'phone'      => $campusProfile['no_hp'] ?? ($user->profile?->phone ?? '08123456789'),
+                        'gender'     => $campusProfile['jenis_kelamin'] ?? ($user->profile?->gender ?? 'L'),
+                        'birth_date' => $campusProfile['tanggal_lahir'] ?? ($user->profile?->birth_date ?? '2005-02-25'),
+                        'address'    => $campusProfile['alamat'] ?? ($user->profile?->address ?? 'Alamat Mahasiswa'),
+                    ]
+                );
+
+                Registration::firstOrCreate(
+                    ['user_id' => $user->id],
+                    ['status' => 'draft']
+                );
+            }
+
+            Auth::login($user, $request->boolean('remember'));
+            $request->session()->regenerate();
+
+            $welcomeMsg = $isAdminOrStaff
+                ? "Selamat datang, {$fullName}! Berhasil masuk sebagai Administrator/Petugas Kampus melalui API Portal."
+                : "Selamat datang, {$fullName}! Berhasil masuk menggunakan akun Portal Kampus.";
+
+            return $this->redirectBasedOnRole($user)->with('success', $welcomeMsg);
+        }
+
+        // 2. Fallback Autentikasi Database Lokal Sipkesma
+        // Cari user berdasarkan email (case-insensitive) atau nama
         $user = User::whereRaw('LOWER(email) = ?', [strtolower($loginInput)])
             ->orWhereRaw('LOWER(name) = ?', [strtolower($loginInput)])
+            ->orWhereHas('profile', fn($q) => $q->where('nim', $loginInput))
             ->first();
 
         // 2. Alias khusus admin (admin, administrator, admin@gmail.com, admin@uinssc.ac.id)
@@ -42,11 +114,9 @@ class AuthController extends Controller
                 ->first();
         }
 
-        // 3. Alias khusus petugas medis (petugas, petugas@uinssc.ac.id, petugas@gmail.com)
+        // 3. Alias akun admin medis / dr. Nurul (petugas, petugas@uinssc.ac.id, petugas@gmail.com)
         if (!$user && in_array(strtolower($loginInput), ['petugas', 'petugas@uinssc.ac.id', 'petugas@gmail.com'])) {
-            $user = User::whereHas('roles', fn($q) => $q->where('name', 'staff'))
-                ->orWhere('email', 'petugas@uinssc.ac.id')
-                ->first();
+            $user = User::where('email', 'petugas@uinssc.ac.id')->first();
         }
 
         // 4. Verifikasi kecocokan password
@@ -193,6 +263,8 @@ class AuthController extends Controller
             $user = User::where('email', 'petugas@uinssc.ac.id')->first();
         } elseif ($target === 'admin') {
             $user = User::where('email', 'admin@uinssc.ac.id')->first();
+        } else {
+            $user = User::where('email', $target . '@uinssc.ac.id')->first();
         }
 
         if ($user) {
@@ -208,9 +280,6 @@ class AuthController extends Controller
     {
         if ($user->hasRole('admin')) {
             return redirect()->route('admin.dashboard');
-        }
-        if ($user->hasRole('staff')) {
-            return redirect()->route('staff.dashboard');
         }
         return redirect()->route('student.beranda');
     }

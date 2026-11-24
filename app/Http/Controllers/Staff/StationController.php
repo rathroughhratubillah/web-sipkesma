@@ -14,10 +14,10 @@ class StationController extends Controller
     protected $allowedStations = [
         'urin' => [
             'key' => 'urin',
-            'title' => 'Stasiun 1: Tes Urin (Laboratorium)',
-            'desc' => 'Uji parameter urin lengkap, glukosa, protein, dan sedimen.',
+            'title' => 'Stasiun 1: Tes Buta Warna (Ishihara)',
+            'desc' => 'Uji persepsi warna menggunakan metode Buku Ishihara 38 Plates.',
             'default_examiner' => 'dr. Hendra Sp.PK',
-            'preset_notes' => 'Reduksi (-), Albumin (-), Sedimen dalam batas normal. Hasil laboratorium steril.',
+            'preset_notes' => 'Hasil uji Buku Ishihara 38 plates: 38/38 terbaca dengan benar. Persepsi warna normal (bebas buta warna).',
         ],
         'napza' => [
             'key' => 'napza',

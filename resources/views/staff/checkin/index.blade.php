@@ -138,7 +138,7 @@
 
             <div class="p-4 rounded-2xl bg-teal-50 text-teal-800 text-xs flex items-center justify-between">
                 <span>Siap Check-in: <strong>{{ $stats['ready_to_checkin'] }} peserta</strong></span>
-                <a href="{{ route('staff.queue.display') }}" class="font-bold underline">Buka Monitor Antrean &rarr;</a>
+                <a href="{{ route('staff.station.index', 'urin') }}" class="font-bold underline text-teal-700 hover:text-teal-900">Ke Stasiun Tes &rarr;</a>
             </div>
 
         </div>

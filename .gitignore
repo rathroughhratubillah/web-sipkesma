@@ -26,3 +26,10 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 *.lnk
+*.mkv
+*.mp4
+/public/uploads/proofs/*
+!/public/uploads/proofs/.gitkeep
+.claude/
+.mcp.json
+boost.json

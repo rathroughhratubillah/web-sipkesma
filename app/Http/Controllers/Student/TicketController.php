@@ -13,44 +13,26 @@ class TicketController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $user->load(['profile', 'registration.testSession', 'registration.payment']);
+        $user->load(['profile', 'registration.testSession', 'registration.payment', 'healthHistory']);
         $registration = $user->registration;
 
-        $isUnlocked = $registration && in_array($registration->status, ['cleared', 'checked_in', 'in_progress', 'completed']);
+        // Tiket hanya terbuka jika pembayaran sudah diverifikasi oleh admin (status: cleared, checked_in, in_progress, completed)
+        $isUnlocked = $registration && in_array($registration->status, ['cleared', 'checked_in', 'in_progress', 'completed']) && !empty($registration->queue_code);
 
-        $qrSvg = null;
-        if ($isUnlocked) {
-            try {
-                $payload = $registration->qr_code_payload;
-                $qrSvg = QrCode::size(200)->generate($payload);
-            } catch (\Throwable $e) {
-                $qrSvg = null;
-            }
-        }
-
-        return view('student.ticket', compact('user', 'registration', 'isUnlocked', 'qrSvg'));
+        return view('student.ticket', compact('user', 'registration', 'isUnlocked'));
     }
 
     public function downloadPdf()
     {
         $user = Auth::user();
-        $user->load(['profile', 'healthHistory', 'registration.testSession']);
+        $user->load(['profile', 'healthHistory', 'registration.testSession', 'registration.payment']);
         $registration = $user->registration;
 
-        if (!$registration || !in_array($registration->status, ['cleared', 'checked_in', 'in_progress', 'completed'])) {
-            return redirect()->route('student.ticket')->with('error', 'Tiket antrean belum tersedia.');
+        if (!$registration || !in_array($registration->status, ['cleared', 'checked_in', 'in_progress', 'completed']) || empty($registration->queue_code)) {
+            return redirect()->route('student.ticket')->with('error', 'Tiket antrean belum tersedia. Menunggu verifikasi pembayaran oleh admin.');
         }
 
-        $qrBase64 = null;
-        try {
-            $payload = $registration->qr_code_payload;
-            $qrSvg = QrCode::format('svg')->size(160)->generate($payload);
-            $qrBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
-        } catch (\Throwable $e) {
-            $qrBase64 = null;
-        }
-
-        $pdf = Pdf::loadView('tickets.pdf', compact('user', 'registration', 'qrBase64'))
+        $pdf = Pdf::loadView('tickets.pdf', compact('user', 'registration'))
             ->setPaper('a5', 'portrait');
 
         return $pdf->stream('Tiket-Antrean-' . ($registration->queue_code ?? 'SIPKESMA') . '.pdf');

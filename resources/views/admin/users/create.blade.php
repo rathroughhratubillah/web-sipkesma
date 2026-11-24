@@ -55,7 +55,7 @@
                         class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent">
                     @foreach($roles as $r)
                         <option value="{{ $r->name }}" {{ old('role') === $r->name ? 'selected' : ($r->name === 'student' ? 'selected' : '') }}>
-                            {{ ucfirst($r->name) }} {{ $r->name === 'student' ? '(Mahasiswa)' : ($r->name === 'staff' ? '(Petugas Medis)' : '(Administrator)') }}
+                            {{ ucfirst($r->name) }} {{ $r->name === 'student' ? '(Mahasiswa)' : '(Administrator)' }}
                         </option>
                     @endforeach
                 </select>

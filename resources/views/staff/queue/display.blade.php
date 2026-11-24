@@ -66,7 +66,7 @@
             <span class="text-xs font-semibold text-slate-500">Tujuan:</span>
             <select x-model="destination" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold bg-white">
                 <option value="Meja Check-in">Meja Check-in</option>
-                <option value="Stasiun 1: Tes Urin">Stasiun 1: Tes Urin</option>
+                <option value="Stasiun 1: Tes Buta Warna">Stasiun 1: Tes Buta Warna</option>
                 <option value="Stasiun 2: Tes NAPZA">Stasiun 2: Tes NAPZA</option>
                 <option value="Stasiun 3: Pemeriksaan Fisik">Stasiun 3: Pemeriksaan Fisik</option>
                 <option value="Ruang Tunggu Medis">Ruang Tunggu Medis</option>
