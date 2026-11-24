@@ -65,7 +65,7 @@
         @foreach($availableYears as $yr)
             <a href="{{ route('staff.payments.index', ['status' => $status, 'method' => $method, 'year' => $yr]) }}"
                class="px-3 py-1.5 rounded-xl transition {{ (string)($selectedYear ?? '') === (string)$yr ? 'bg-teal-700 text-white' : 'text-slate-600 hover:bg-slate-100' }}">
-                Th. {{ $yr }}
+                {{ $yr }}
             </a>
         @endforeach
     </div>

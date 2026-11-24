@@ -34,7 +34,7 @@
                 <option value="all" {{ ($selectedYear ?? 'all') === 'all' ? 'selected' : '' }}>Semua Tahun (Total Rekap)</option>
                 @foreach($availableYears as $yr)
                     <option value="{{ $yr }}" {{ (string)($selectedYear ?? '') === (string)$yr ? 'selected' : '' }}>
-                        Tahun {{ $yr }} {{ $yr == date('Y') ? '(Tahun Aktif)' : '(Data Lampau)' }}
+                        {{ $yr }}
                     </option>
                 @endforeach
             </select>

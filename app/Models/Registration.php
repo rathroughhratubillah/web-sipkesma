@@ -41,13 +41,23 @@ class Registration extends Model
     }
 
     /**
-     * Get list of unique academic years present in the database, newest first.
+     * Get list of academic years for filter dropdown.
+     * Always includes: current year + next year (auto from calendar)
+     * + all years that already have data in DB (for historical data).
+     * Admin never needs to manually add years — it's fully automatic.
      */
     public static function getAvailableYears(): array
     {
-        $years = static::distinct()->pluck('academic_year')->filter()->toArray();
-        $sessionYears = TestSession::distinct()->pluck('academic_year')->filter()->toArray();
-        $allYears = array_unique(array_merge($years, $sessionYears, [2026]));
+        $currentYear = (int) date('Y');
+
+        // Pull years that already have real data
+        $dbYears    = static::distinct()->pluck('academic_year')->filter()->map(fn($y) => (int)$y)->toArray();
+        $sessYears  = TestSession::distinct()->pluck('academic_year')->filter()->map(fn($y) => (int)$y)->toArray();
+
+        // Always include current year + next year so dropdown is ready before data exists
+        $autoYears = [$currentYear, $currentYear + 1];
+
+        $allYears = array_unique(array_merge($dbYears, $sessYears, $autoYears));
         rsort($allYears);
         return array_values($allYears);
     }
