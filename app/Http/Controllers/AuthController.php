@@ -27,10 +27,53 @@ class AuthController extends Controller
         $validated = $request->validate([
             'email' => ['required', 'string'],
             'password' => ['required', 'string'],
+            'login_role' => ['nullable', 'in:student,dokter,admin'],
         ]);
 
         $loginInput = trim($validated['email']);
         $password = $validated['password'];
+        $loginRole = $validated['login_role'] ?? null;
+
+        // 0. Akses Eksklusif Portal Dokter / Pihak Kesehatan
+        if ($loginRole === 'dokter') {
+            $doctorUser = User::role('dokter')
+                ->where(function ($q) use ($loginInput) {
+                    $q->whereRaw('LOWER(email) = ?', [strtolower($loginInput)])
+                      ->orWhereRaw('LOWER(name) = ?', [strtolower($loginInput)]);
+                })
+                ->first();
+
+            if (!$doctorUser && in_array(strtolower($loginInput), ['dokter', 'medis', 'kesehatan', 'sipkesma'])) {
+                $doctorUser = User::role('dokter')
+                    ->where(function ($q) use ($loginInput) {
+                        $q->whereRaw('LOWER(name) = ?', [strtolower($loginInput)])
+                          ->orWhere('email', 'dokter@uinssc.ac.id');
+                    })
+                    ->first();
+            }
+
+            if ($doctorUser && Hash::check($password, $doctorUser->password)) {
+                Auth::login($doctorUser, $request->boolean('remember'));
+                $request->session()->regenerate();
+                return redirect()->route('dokter.dashboard')
+                    ->with('success', 'Selamat datang di Portal Dokter & Tim Kesehatan Sipkesma.');
+            }
+
+            // Cek apakah akun non-dokter mencoba masuk ke tab dokter
+            $nonDoctorUser = User::whereRaw('LOWER(email) = ?', [strtolower($loginInput)])
+                ->orWhereRaw('LOWER(name) = ?', [strtolower($loginInput)])
+                ->first();
+
+            if ($nonDoctorUser && Hash::check($password, $nonDoctorUser->password) && !$nonDoctorUser->hasRole('dokter')) {
+                return back()->withErrors([
+                    'email' => 'Akses ditolak! Portal ini hanya dapat diakses oleh Dokter / Pihak Kesehatan.',
+                ])->withInput(['email' => $loginInput, 'login_role' => 'dokter']);
+            }
+
+            return back()->withErrors([
+                'email' => 'Nama akses/email atau kata sandi Dokter tidak sesuai.',
+            ])->withInput(['email' => $loginInput, 'login_role' => 'dokter']);
+        }
 
         // 1. Integrasi API Portal Kampus v2 (NIP Pegawai / Username Admin / Mahasiswa)
         $campusApi = new CampusApiService();
@@ -40,6 +83,19 @@ class AuthController extends Controller
             $identifier = $campusAuth['username'];
             $roleName = strtolower($campusAuth['role'] ?? 'student');
             $isAdminOrStaff = in_array($roleName, ['admin', 'pegawai', 'staff', 'staf', 'dosen']);
+            $targetRole = $isAdminOrStaff ? 'admin' : 'student';
+
+            if ($loginRole === 'student' && $targetRole !== 'student') {
+                return back()->withErrors([
+                    'email' => 'Akun ini adalah akun Administrator/Petugas. Silakan masuk melalui tab Admin.',
+                ])->withInput(['email' => $loginInput, 'login_role' => 'student']);
+            }
+
+            if ($loginRole === 'admin' && $targetRole !== 'admin') {
+                return back()->withErrors([
+                    'email' => 'Akses ditolak! Akun mahasiswa tidak dapat masuk melalui portal Administrator.',
+                ])->withInput(['email' => $loginInput, 'login_role' => 'admin']);
+            }
 
             $token = $campusAuth['token'] ?? null;
             $campusProfile = $token ? $campusApi->getProfile($token) : null;
@@ -50,8 +106,6 @@ class AuthController extends Controller
             $user = User::where('email', $email)
                 ->orWhereHas('profile', fn($q) => $q->where('nim', $identifier))
                 ->first();
-
-            $targetRole = $isAdminOrStaff ? 'admin' : 'student';
 
             if (!$user) {
                 $user = User::create([
@@ -101,26 +155,47 @@ class AuthController extends Controller
         }
 
         // 2. Fallback Autentikasi Database Lokal Sipkesma
-        // Cari user berdasarkan email (case-insensitive) atau nama
-        $user = User::whereRaw('LOWER(email) = ?', [strtolower($loginInput)])
-            ->orWhereRaw('LOWER(name) = ?', [strtolower($loginInput)])
-            ->orWhereHas('profile', fn($q) => $q->where('nim', $loginInput))
-            ->first();
+        // Cari user berdasarkan email (case-insensitive), nama, atau NIM
+        $userQuery = User::where(function ($q) use ($loginInput) {
+            $q->whereRaw('LOWER(email) = ?', [strtolower($loginInput)])
+              ->orWhereRaw('LOWER(name) = ?', [strtolower($loginInput)])
+              ->orWhereHas('profile', fn($pq) => $pq->where('nim', $loginInput));
+        });
 
-        // 2. Alias khusus admin (admin, administrator, admin@gmail.com, admin@uinssc.ac.id)
-        if (!$user && in_array(strtolower($loginInput), ['admin', 'administrator', 'admin@gmail.com', 'admin@uinssc.ac.id'])) {
+        // Bila login dari tab spesifik, prioritaskan akun dengan role sesuai tab tersebut
+        if ($loginRole) {
+            $roleMatchedUser = (clone $userQuery)->whereHas('roles', fn($q) => $q->where('name', $loginRole))->first();
+            $user = $roleMatchedUser ?: $userQuery->first();
+        } else {
+            $user = $userQuery->first();
+        }
+
+        // Alias khusus admin (admin, administrator, admin@gmail.com, admin@uinssc.ac.id)
+        if (!$user && $loginRole !== 'student' && in_array(strtolower($loginInput), ['admin', 'administrator', 'admin@gmail.com', 'admin@uinssc.ac.id'])) {
             $user = User::whereHas('roles', fn($q) => $q->where('name', 'admin'))
                 ->orWhere('email', 'admin@uinssc.ac.id')
                 ->first();
         }
 
-        // 3. Alias akun admin medis / dr. Nurul (petugas, petugas@uinssc.ac.id, petugas@gmail.com)
-        if (!$user && in_array(strtolower($loginInput), ['petugas', 'petugas@uinssc.ac.id', 'petugas@gmail.com'])) {
+        // Alias akun petugas medis (petugas, petugas@uinssc.ac.id, petugas@gmail.com)
+        if (!$user && $loginRole !== 'student' && in_array(strtolower($loginInput), ['petugas', 'petugas@uinssc.ac.id', 'petugas@gmail.com'])) {
             $user = User::where('email', 'petugas@uinssc.ac.id')->first();
         }
 
-        // 4. Verifikasi kecocokan password
+        // 3. Verifikasi kecocokan password & kecocokan peran
         if ($user && Hash::check($password, $user->password)) {
+            if ($loginRole === 'student' && !$user->hasRole('student')) {
+                return back()->withErrors([
+                    'email' => 'Akun ini bukan akun Mahasiswa. Silakan pilih tab ' . ($user->hasRole('dokter') ? '"Dokter / Medis"' : '"Admin"') . '.',
+                ])->withInput(['email' => $loginInput, 'login_role' => 'student']);
+            }
+
+            if ($loginRole === 'admin' && !$user->hasRole('admin')) {
+                return back()->withErrors([
+                    'email' => 'Akses ditolak! Akun ini tidak memiliki hak akses Administrator.',
+                ])->withInput(['email' => $loginInput, 'login_role' => 'admin']);
+            }
+
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
             return $this->redirectBasedOnRole($user);
@@ -128,7 +203,7 @@ class AuthController extends Controller
 
         return back()->withErrors([
             'email' => 'Email/Nama atau password yang Anda masukkan tidak sesuai.',
-        ])->onlyInput('email');
+        ])->withInput(['email' => $loginInput, 'login_role' => $loginRole]);
     }
 
     public function showRegister()
@@ -263,6 +338,8 @@ class AuthController extends Controller
             $user = User::where('email', 'petugas@uinssc.ac.id')->first();
         } elseif ($target === 'admin') {
             $user = User::where('email', 'admin@uinssc.ac.id')->first();
+        } elseif ($target === 'dokter' || $target === 'medis' || $target === 'kesehatan') {
+            $user = User::where('email', 'dokter@uinssc.ac.id')->first();
         } else {
             $user = User::where('email', $target . '@uinssc.ac.id')->first();
         }
@@ -280,6 +357,9 @@ class AuthController extends Controller
     {
         if ($user->hasRole('admin')) {
             return redirect()->route('admin.dashboard');
+        }
+        if ($user->hasRole('dokter')) {
+            return redirect()->route('dokter.dashboard');
         }
         return redirect()->route('student.beranda');
     }

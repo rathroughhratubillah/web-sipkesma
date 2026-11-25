@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CertificateVerificationController;
+use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Staff\CheckInController;
 use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
@@ -75,6 +76,18 @@ Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/sertifikat', fn() => redirect()->route('student.ticket'))->name('student.certificate');
     Route::get('/sertifikat/download', fn() => redirect()->route('student.ticket'))->name('student.certificate.download');
     Route::get('/status', fn() => redirect()->route('student.ticket'))->name('student.status');
+});
+
+// ============================================================
+// Portal Dokter & Tim Kesehatan Klinik (Eksklusif Role: dokter)
+// ============================================================
+Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->as('dokter.')->group(function () {
+    Route::get('/', [DoctorController::class, 'dashboard'])->name('dashboard');
+    Route::get('/scan', [DoctorController::class, 'scan'])->name('scan');
+    Route::post('/scan/lookup', [DoctorController::class, 'scanLookup'])->name('scan.lookup');
+    Route::post('/scan/{registration}/checkin', [DoctorController::class, 'checkInOnSite'])->name('scan.checkin');
+    Route::get('/mahasiswa', [DoctorController::class, 'patients'])->name('patients.index');
+    Route::get('/mahasiswa/{registration}', [DoctorController::class, 'showPatient'])->name('patients.show');
 });
 
 // Operasional Pelayanan Skrining Medis (Role: admin)

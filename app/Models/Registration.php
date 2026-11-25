@@ -111,6 +111,77 @@ class Registration extends Model
     }
 
     /**
+     * Canonical 1D ticket barcode payload (matches printed & web ticket).
+     */
+    public function getTicketBarcodeCodeAttribute(): string
+    {
+        $year = $this->academic_year ?? date('Y');
+        $queueOrId = $this->queue_code ?: ('REG-' . $this->id);
+        return "SPK-{$year}-PPKMB-{$queueOrId}";
+    }
+
+    /**
+     * Find a registration from any ticket barcode, QR payload, queue code, or NIM/NISN.
+     */
+    public static function findByScanCode(string $input): ?self
+    {
+        $code = trim($input);
+        if ($code === '') {
+            return null;
+        }
+
+        $relations = ['user.profile', 'user.healthHistory', 'testSession', 'payment', 'stationResults'];
+
+        // 1. Standardized Ticket Barcode: SPK-{YEAR}-PPKMB-{QUEUE_OR_REG}
+        if (preg_match('/^SPK-(\d{4})-PPKMB-(.+)$/i', $code, $matches)) {
+            $year = (int) $matches[1];
+            $tail = strtoupper(trim($matches[2]));
+
+            if (preg_match('/^REG-(\d+)$/i', $tail, $regMatch)) {
+                return static::with($relations)->find((int) $regMatch[1]);
+            }
+
+            $matchedWithYear = static::with($relations)
+                ->where('queue_code', $tail)
+                ->where('academic_year', $year)
+                ->first();
+
+            if ($matchedWithYear) {
+                return $matchedWithYear;
+            }
+
+            return static::with($relations)->where('queue_code', $tail)->first();
+        }
+
+        // 2. Legacy QR Payload: SIPKESMA:{id}:{queue}:{nim}
+        if (str_starts_with(strtoupper($code), 'SIPKESMA:')) {
+            $parts = explode(':', $code);
+            $regId = $parts[1] ?? null;
+            if ($regId && is_numeric($regId)) {
+                return static::with($relations)->find((int) $regId);
+            }
+        }
+
+        // 3. Direct Queue Code (e.g., A-001 or 2025-A-001)
+        $byQueue = static::with($relations)
+            ->where('queue_code', strtoupper($code))
+            ->first();
+        if ($byQueue) {
+            return $byQueue;
+        }
+
+        // 4. Lookup by NIM / NISN
+        $profile = Profile::where('nim', $code)->first();
+        if ($profile) {
+            return static::with($relations)
+                ->where('user_id', $profile->user_id)
+                ->first();
+        }
+
+        return null;
+    }
+
+    /**
      * Generate sequential queue code safely with database locking.
      * Guarantees strict FIFO order and prevents collision even when multiple users register simultaneously.
      */

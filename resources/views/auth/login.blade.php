@@ -13,14 +13,27 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
+@php
+    $initialTab = old('login_role');
+    if (!$initialTab) {
+        $reqRole = request('role');
+        if (in_array($reqRole, ['admin', 'staff'])) {
+            $initialTab = 'admin';
+        } elseif (in_array($reqRole, ['dokter', 'medis', 'kesehatan'])) {
+            $initialTab = 'dokter';
+        } else {
+            $initialTab = 'student';
+        }
+    }
+@endphp
 <body class="min-h-screen flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 relative"
       style="background-image: url('{{ asset('images/kampus-uinssc.jpg') }}'); background-size: cover; background-position: center; background-attachment: fixed;"
-      x-data="{ activeTab: '{{ request('role') === 'admin' || request('role') === 'staff' ? 'admin' : 'student' }}' }">
+      x-data="{ activeTab: '{{ $initialTab }}' }">
 
     {{-- Overlay gelap transparan agar form tetap terbaca --}}
     <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px]"></div>
 
-    <div class="relative z-10 w-full max-w-md space-y-6">
+    <div class="relative z-10 w-full max-w-lg space-y-6">
         <!-- Logo -->
         <div class="text-center">
             <a href="{{ url('/') }}" class="inline-flex items-center gap-3 group">
@@ -39,25 +52,35 @@
             <p class="mt-1 text-sm text-slate-200 font-medium drop-shadow-xs">Pilih akses sesuai peran Anda di Sistem Sipkesma</p>
         </div>
 
-        <!-- Role Tab Switcher -->
-        <div class="p-1.5 bg-slate-900/60 backdrop-blur-md rounded-2xl flex items-center gap-1.5 text-sm font-semibold border border-white/20 shadow-lg">
+        <!-- Role Tab Switcher (3 Peran: Maba, Dokter/Medis, Admin) -->
+        <div class="p-1.5 bg-slate-900/65 backdrop-blur-md rounded-2xl grid grid-cols-3 gap-1.5 text-xs sm:text-sm font-semibold border border-white/20 shadow-lg">
             <button type="button"
                     @click="activeTab = 'student'"
                     :class="activeTab === 'student' ? 'bg-white text-teal-800 shadow-md font-bold' : 'text-white/80 hover:text-white hover:bg-white/10'"
-                    class="flex-1 py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    class="py-2.5 px-2 sm:px-3 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" />
                 </svg>
-                <span>Maba (Mahasiswa Baru)</span>
+                <span class="truncate">Maba</span>
+            </button>
+            <button type="button"
+                    @click="activeTab = 'dokter'"
+                    :class="activeTab === 'dokter' ? 'bg-emerald-500 text-white shadow-md font-bold' : 'text-white/80 hover:text-white hover:bg-white/10'"
+                    class="py-2.5 px-2 sm:px-3 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.5v3m-1.5-1.5h3" />
+                </svg>
+                <span class="truncate">Dokter / Medis</span>
             </button>
             <button type="button"
                     @click="activeTab = 'admin'"
-                    :class="activeTab === 'admin' ? 'bg-white text-teal-800 shadow-md font-bold' : 'text-white/80 hover:text-white hover:bg-white/10'"
-                    class="flex-1 py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    :class="activeTab === 'admin' ? 'bg-white text-slate-900 shadow-md font-bold' : 'text-white/80 hover:text-white hover:bg-white/10'"
+                    class="py-2.5 px-2 sm:px-3 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                 </svg>
-                <span>Admin & Petugas Kampus</span>
+                <span class="truncate">Admin</span>
             </button>
         </div>
 
@@ -108,15 +131,34 @@
                 </div>
             </div>
 
+            <!-- Info Banner Khusus Dokter / Pihak Kesehatan -->
+            <div x-show="activeTab === 'dokter'" x-cloak x-transition
+                 class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-start gap-3">
+                <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.5v3m-1.5-1.5h3" />
+                    </svg>
+                </div>
+                <div class="text-xs leading-relaxed">
+                    <div class="font-bold text-emerald-950">Portal Dokter &amp; Tim Medis Klinik</div>
+                    <p class="text-emerald-800/90 text-[11px] mt-0.5">
+                        Akses eksklusif pihak kesehatan untuk melihat data diri, riwayat kesehatan, dan memindai barcode tiket peserta di tempat.
+                    </p>
+                </div>
+            </div>
+
             <form method="POST" action="{{ route('login') }}" class="space-y-4">
                 @csrf
+                <input type="hidden" name="login_role" :value="activeTab">
+
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-                           x-text="activeTab === 'student' ? 'Email Pendaftaran' : 'NIP / Username / Email'">
+                           x-text="activeTab === 'student' ? 'Email Pendaftaran' : (activeTab === 'dokter' ? 'Nama Akses / Username Dokter' : 'NIP / Username / Email')">
                         Email
                     </label>
                     <input type="text" name="email" value="{{ old('email') }}" required autofocus
-                           :placeholder="activeTab === 'student' ? 'Masukkan email terdaftar' : 'Masukkan NIP atau Email'"
+                           :placeholder="activeTab === 'student' ? 'Masukkan email terdaftar' : (activeTab === 'dokter' ? 'Masukkan nama akses (contoh: sipkesma)' : 'Masukkan NIP atau Email')"
                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-sm outline-hidden transition">
                 </div>
 
@@ -139,14 +181,25 @@
                 <!-- Tombol Masuk Mahasiswa -->
                 <button type="submit"
                         x-show="activeTab === 'student'"
+                        x-cloak
                         class="w-full py-3.5 px-4 rounded-xl text-white font-bold text-sm shadow-md transition bg-teal-600 hover:bg-teal-700 shadow-teal-600/25 flex items-center justify-center gap-2 cursor-pointer">
                     <span>Masuk Portal Maba</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                </button>
+
+                <!-- Tombol Masuk Dokter / Tim Medis -->
+                <button type="submit"
+                        x-show="activeTab === 'dokter'"
+                        x-cloak
+                        class="w-full py-3.5 px-4 rounded-xl text-white font-bold text-sm shadow-md transition bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer">
+                    <span>Masuk Portal Dokter &amp; Medis</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                 </button>
 
                 <!-- Tombol Masuk Administrator -->
                 <button type="submit"
                         x-show="activeTab === 'admin'"
+                        x-cloak
                         class="w-full py-3.5 px-4 rounded-xl text-white font-bold text-sm shadow-md transition bg-slate-900 hover:bg-slate-800 shadow-slate-900/25 flex items-center justify-center gap-2 cursor-pointer">
                     <span>Masuk Panel Administrator</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
@@ -154,12 +207,16 @@
             </form>
 
             <!-- Footer Card Contextual -->
-            <div x-show="activeTab === 'student'" class="pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
+            <div x-show="activeTab === 'student'" x-cloak class="pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
                 Belum memiliki akun pendaftaran? 
                 <a href="{{ route('register') }}" class="font-bold text-teal-600 hover:text-teal-700">Daftar Skrining Baru</a>
             </div>
 
-            <div x-show="activeTab === 'admin'" class="pt-3 border-t border-slate-100 text-center text-xs text-slate-400">
+            <div x-show="activeTab === 'dokter'" x-cloak class="pt-3 border-t border-slate-100 text-center text-xs text-emerald-700 font-medium">
+                Hanya akun berwenang Dokter / Pihak Kesehatan Klinik yang dapat masuk melalui akses ini
+            </div>
+
+            <div x-show="activeTab === 'admin'" x-cloak class="pt-3 border-t border-slate-100 text-center text-xs text-slate-400">
                 Akses terbatas untuk administrator dan pengelola resmi sistem Sipkesma
             </div>
         </div>

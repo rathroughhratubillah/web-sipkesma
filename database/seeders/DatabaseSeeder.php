@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Roles
         $studentRole = Role::firstOrCreate(['name' => 'student']);
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $adminRole   = Role::firstOrCreate(['name' => 'admin']);
+        $dokterRole  = Role::firstOrCreate(['name' => 'dokter']);
 
         // Migrasi jika ada role staff lama
         $oldStaffRole = Role::where('name', 'staff')->first();
@@ -35,7 +36,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::firstOrCreate(
             ['email' => 'admin@uinssc.ac.id'],
             [
-                'name' => 'Administrator PPKMB',
+                'name'     => 'Administrator PPKMB',
                 'password' => Hash::make('admin123'),
             ]
         );
@@ -45,11 +46,21 @@ class DatabaseSeeder extends Seeder
         $staff = User::firstOrCreate(
             ['email' => 'petugas@uinssc.ac.id'],
             [
-                'name' => 'dr. Nurul Aini, Sp.PK',
+                'name'     => 'dr. Nurul Aini, Sp.PK',
                 'password' => Hash::make('password'),
             ]
         );
         $staff->syncRoles([$adminRole]);
+
+        // 4. Dokter / Tim Kesehatan Klinik (Portal Dokter Eksklusif)
+        $dokter = User::firstOrCreate(
+            ['email' => 'dokter@uinssc.ac.id'],
+            [
+                'name'     => 'sipkesma',
+                'password' => Hash::make('admin123'),
+            ]
+        );
+        $dokter->syncRoles([$dokterRole]);
 
         // 4. Test Sessions
         $session1 = TestSession::firstOrCreate(

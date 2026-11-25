@@ -322,10 +322,16 @@
                         </table>
                     </div>
 
-                    <!-- 1D Barcode (Classical Boarding Pass Barcode Style) -->
+                    <!-- 1D Code 128B Scannable Barcode -->
                     <div class="barcode-wrap">
-                        <div class="barcode-bars">|||||| | |||| || ||| |||| | |||||| || | |||| |||</div>
-                        <div class="barcode-code">SPK-2026-PPKMB-{{ $registration->queue_code ?? 'TICKET' }}</div>
+                        <div style="display: inline-block; background-color: #ffffff; padding: 4px 6px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                            @if(!empty($barcodeHtml))
+                                {!! $barcodeHtml !!}
+                            @else
+                                {!! app(\App\Services\BarcodeService::class)->toHtmlTable($registration->ticket_barcode_code, 38, 1) !!}
+                            @endif
+                        </div>
+                        <div class="barcode-code">{{ $barcodeCode ?? $registration->ticket_barcode_code }}</div>
                     </div>
 
                 </td>

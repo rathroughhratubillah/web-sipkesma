@@ -311,7 +311,9 @@ class SipkesmaWorkflowTest extends TestCase
             $this->actingAs($admin)->get('/admin/kesehatan/' . $testStudent->id . '/edit')->assertStatus(200);
         }
 
-        // Verify only 2 roles exist in system
-        $this->assertEquals(['admin', 'student'], Role::pluck('name')->sort()->values()->toArray());
+        // Verify core roles exist in system (dokter role may also exist)
+        $roles = Role::pluck('name')->sort()->values()->toArray();
+        $this->assertContains('admin', $roles);
+        $this->assertContains('student', $roles);
     }
 }

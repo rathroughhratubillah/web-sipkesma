@@ -122,35 +122,18 @@
                         </div>
                     </div>
 
-                    <!-- 1D Barcode Container (Clean Classic Barcode, No QR) -->
-                    <div class="pt-2 flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 border border-slate-200">
-                        <div class="flex items-end justify-center gap-0.5 h-10 w-full max-w-xs px-4">
-                            <!-- Vector-like Pure CSS Barcode Simulation -->
-                            <div class="w-1.5 h-10 bg-slate-900"></div>
-                            <div class="w-0.5 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-1 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-2 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-0.5 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-1.5 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-1 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-2.5 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-0.5 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-1.5 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-2 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-0.5 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-1.5 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-1 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-2 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-0.5 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-1.5 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-2.5 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-1 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-0.5 h-10 bg-slate-900 ml-1"></div>
-                            <div class="w-1.5 h-10 bg-slate-900 ml-0.5"></div>
-                            <div class="w-2 h-10 bg-slate-900 ml-1"></div>
+                    <!-- Real Scannable 1D Barcode Code 128B -->
+                    <div class="pt-3 flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200/80 shadow-2xs max-w-full overflow-x-auto flex items-center justify-center">
+                            @if(!empty($barcodeSvg))
+                                {!! $barcodeSvg !!}
+                            @endif
                         </div>
-                        <div class="text-[11px] font-mono font-bold tracking-widest text-slate-600 mt-2">
-                            SPK-2026-PPKMB-{{ $registration->queue_code ?? 'TICKET' }}
+                        <div class="text-[11px] font-mono font-bold tracking-widest text-slate-700 mt-2 select-all">
+                            {{ $barcodeCode ?? $registration->ticket_barcode_code }}
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">
+                            Scan barcode ini oleh Dokter / Petugas Klinik saat pemeriksaan di tempat
                         </div>
                     </div>
 

@@ -34,33 +34,7 @@ class CheckInController extends Controller
         ]);
 
         $input = trim($request->input('query'));
-        $registration = null;
-
-        // Check if QR payload format SIPKESMA:id:queue:nim
-        if (str_starts_with($input, 'SIPKESMA:')) {
-            $parts = explode(':', $input);
-            $regId = $parts[1] ?? null;
-            if ($regId) {
-                $registration = Registration::with('user.profile', 'testSession')->find($regId);
-            }
-        }
-
-        // Search by queue code (e.g., A-001)
-        if (!$registration) {
-            $registration = Registration::with('user.profile', 'testSession')
-                ->where('queue_code', strtoupper($input))
-                ->first();
-        }
-
-        // Search by NIM
-        if (!$registration) {
-            $profile = Profile::where('nim', $input)->first();
-            if ($profile) {
-                $registration = Registration::with('user.profile', 'testSession')
-                    ->where('user_id', $profile->user_id)
-                    ->first();
-            }
-        }
+        $registration = Registration::findByScanCode($input);
 
         if (!$registration) {
             if ($request->wantsJson()) {
